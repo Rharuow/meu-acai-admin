@@ -1,0 +1,17 @@
+.text-hover {
+  transition: all 0.8s;
+}
+
+.text-yellow-hover:hover {
+  color: $yellow;
+}
+
+.transform-hover {
+  transition: transform 0.8s;
+}
+
+@for $i from 1 through 500 {
+  .transform-translate-top-#{$i}px:hover {
+    transform: translateY(-#{$i}px);
+  }
+}

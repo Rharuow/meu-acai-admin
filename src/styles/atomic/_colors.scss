@@ -1,0 +1,17 @@
+.text-yellow {
+  color: $yellow;
+}
+
+.text-active {
+  color: $yellow;
+}
+
+@each $key, $gray in $grays {
+  .text-gray-#{$key} {
+    color: $gray;
+  }
+
+  .border-gray-#{$key} {
+    border-color: $gray;
+  }
+}

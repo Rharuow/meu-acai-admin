@@ -1,0 +1,181 @@
+@for $i from 0 through 100 {
+	.z-index-#{$i} {
+		z-index: #{$i};
+	}
+
+	// Width
+	.w-#{$i} {
+		width: #{$i}#{"%"};
+	}
+	.w-#{$i}vw {
+		width: #{$i}vw;
+	}
+	.w-#{$i}px {
+		width: #{$i}px;
+	}
+	.w-#{$i}rem {
+		width: #{$i}rem;
+	}
+
+	.top-#{$i}px {
+		top: #{$i}px;
+	}
+
+	.start-#{$i}px {
+		left: #{$i}px;
+	}
+
+	.end-#{$i}px {
+		right: #{$i}px;
+	}
+
+	.bottom-#{$i}px {
+		bottom: #{$i}px;
+	}
+
+	.min-w-#{$i} {
+		min-width: #{$i}#{"%"};
+	}
+	.min-w-#{$i}vw {
+		min-width: #{$i}vw;
+	}
+	.min-w-#{$i}px {
+		min-width: #{$i}px;
+	}
+	.min-w-#{$i}rem {
+		min-width: #{$i}rem;
+	}
+
+	.max-w-#{$i} {
+		max-width: #{$i}#{"%"};
+	}
+	.max-w-#{$i}vw {
+		max-width: #{$i}vw;
+	}
+	.max-w-#{$i}px {
+		max-width: #{$i}px;
+	}
+	.max-w-#{$i}rem {
+		max-width: #{$i}rem;
+	}
+
+	// Height
+	.h-#{$i} {
+		height: #{$i}#{"%"};
+	}
+	.h-#{$i}vh {
+		height: #{$i}vh;
+	}
+	.h-#{$i}px {
+		height: #{$i}px;
+	}
+	.h-#{$i}rem {
+		height: #{$i}rem;
+	}
+	.min-h-#{$i} {
+		min-height: #{$i}#{"%"};
+	}
+	.min-h-#{$i}vh {
+		min-height: #{$i}vh;
+	}
+	.min-h-#{$i}px {
+		min-height: #{$i}px;
+	}
+	.min-h-#{$i}rem {
+		min-height: #{$i}rem;
+	}
+	.max-h-#{$i} {
+		max-height: #{$i}#{"%"};
+	}
+	.max-h-#{$i}vh {
+		max-height: #{$i}vh;
+	}
+	.max-h-#{$i}px {
+		max-height: #{$i}px;
+	}
+	.max-h-#{$i}rem {
+		max-height: #{$i}rem;
+	}
+}
+
+@for $i from 101 through 1000 {
+	.z-index-#{$i} {
+		z-index: #{$i};
+	}
+
+	.top-#{$i}px {
+		top: #{$i}px;
+	}
+
+	.start-#{$i}px {
+		left: #{$i}px;
+	}
+
+	.end-#{$i}px {
+		right: #{$i}px;
+	}
+
+	.bottom-#{$i}px {
+		bottom: #{$i}px;
+	}
+
+	.w-#{$i}vw {
+		width: #{$i}vw;
+	}
+	.w-#{$i}px {
+		width: #{$i}px;
+	}
+	.w-#{$i}rem {
+		width: #{$i}rem;
+	}
+
+	.min-w-#{$i}vw {
+		min-width: #{$i}vw;
+	}
+	.min-w-#{$i}px {
+		min-width: #{$i}px;
+	}
+	.min-w-#{$i}rem {
+		min-width: #{$i}rem;
+	}
+
+	.max-w-#{$i}vw {
+		max-width: #{$i}vw;
+	}
+	.max-w-#{$i}px {
+		max-width: #{$i}px;
+	}
+	.max-w-#{$i}rem {
+		max-width: #{$i}rem;
+	}
+
+	.h-#{$i}vh {
+		height: #{$i}vh;
+	}
+	.h-#{$i}px {
+		height: #{$i}px;
+	}
+	.h-#{$i}rem {
+		height: #{$i}rem;
+	}
+
+	.min-h-#{$i}vh {
+		min-height: #{$i}vh;
+	}
+	.min-h-#{$i}px {
+		min-height: #{$i}px;
+	}
+	.min-h-#{$i}rem {
+		min-height: #{$i}rem;
+	}
+
+	.max-h-#{$i}vh {
+		max-height: #{$i}vh;
+	}
+	.max-h-#{$i}px {
+		max-height: #{$i}px;
+	}
+	.max-h-#{$i}rem {
+		max-height: #{$i}rem;
+	}
+}

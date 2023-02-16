@@ -3,7 +3,10 @@ import Image from "next/image";
 import { Button, Card, Form } from "react-bootstrap";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
-import Link from "next/link";
+import Swal from "sweetalert2";
+
+import { useSessionContext } from "@/src/context/Session";
+import Cookies from "js-cookie";
 
 type Inputs = {
   username: string;
@@ -13,18 +16,31 @@ type Inputs = {
 export default function SignIn() {
   const { register, handleSubmit, watch } = useForm<Inputs>();
 
+  const { setUser } = useSessionContext();
+
   const hasData = !!watch("username") && !!watch("password");
 
-  const route = useRouter();
+  const router = useRouter();
 
-  const onSubmit: SubmitHandler<Inputs> = (data: any) => {
-    console.log("data = ", data);
-    route.push("/dashboard");
+  const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
+    if (
+      data.username === process.env.NEXT_PUBLIC_USERNAME &&
+      data.password === process.env.NEXT_PUBLIC_PASSWORD
+    ) {
+      Cookies.set("name", JSON.stringify(data.username));
+      setUser({ name: data.username });
+      router.push("/dashboard");
+    } else
+      Swal.fire({
+        title: "Opps...",
+        icon: "error",
+        text: "Parece que você digitou a senha errada!",
+      });
   };
 
   return (
     <div className="min-h-100vh d-flex justify-content-center align-items-center">
-      <div className="d-flex flex-wrap">
+      <div className="d-flex flex-wrap px-3">
         <div className="d-flex justify-content-center w-100">
           <Image
             alt="logo"
@@ -58,7 +74,7 @@ export default function SignIn() {
                   type="submit"
                   variant="secondary"
                   className="mb-1"
-                  disabled={!hasData && process.env.NODE_ENV !== "development"}
+                  disabled={!hasData}
                 >
                   Entrar
                 </Button>

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
+import ReactLoading from "react-loading";
 
 interface ISessionContext {
   sessionLoading: boolean;
@@ -34,10 +35,13 @@ export default function SessionProvider({
   const router = useRouter();
 
   useEffect(() => {
-    const userCookied = JSON.parse(Cookies.get("user") || "false");
+    const userCookied = JSON.parse(Cookies.get("name") || "false");
+
+    console.log(userCookied);
 
     if (userCookied) {
       setUser(userCookied);
+      router.push("/dashboard");
     } else {
       router.push("/");
     }
@@ -48,7 +52,13 @@ export default function SessionProvider({
 
   return (
     <SessionContext.Provider value={{ sessionLoading: loading, user, setUser }}>
-      {children}
+      {loading ? (
+        <>
+          <ReactLoading type="spinningBubbles" color="#46295a" />
+        </>
+      ) : (
+        children
+      )}
     </SessionContext.Provider>
   );
 }

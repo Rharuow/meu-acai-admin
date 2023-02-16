@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 
-import { useSessionContext } from "@/src/context/Session";
+import { useSessionContext } from "../context/Session";
 import Cookies from "js-cookie";
 
 type Inputs = {

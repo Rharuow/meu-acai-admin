@@ -2,6 +2,7 @@ import Head from "next/head";
 import React, { createContext, ReactNode, useContext, useState } from "react";
 import SignIn from "@/src/rharuow-admin/pages/SignIn";
 import { useSessionContext } from "./Session";
+import Nav from "../components/Nav";
 
 interface ILayoutContext {
   language: "pt-BR" | "US";
@@ -28,7 +29,16 @@ const LayoutProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
       <Head>
         <title>Admin - Meu Açai</title>
       </Head>
-      <main id="rharuow_app">{user ? children : <SignIn />}</main>
+      <main id="rharuow_app">
+        {user ? (
+          <>
+            <Nav />
+            {children}
+          </>
+        ) : (
+          <SignIn />
+        )}
+      </main>
     </LayoutContext.Provider>
   );
 };

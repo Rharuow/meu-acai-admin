@@ -37,14 +37,7 @@ export default function SessionProvider({
   useEffect(() => {
     const userCookied = JSON.parse(Cookies.get("name") || "false");
 
-    console.log(userCookied);
-
-    if (userCookied) {
-      setUser(userCookied);
-      router.push("/dashboard");
-    } else {
-      router.push("/");
-    }
+    userCookied && setUser(userCookied);
 
     setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps

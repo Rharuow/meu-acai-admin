@@ -2,6 +2,7 @@ import { faUser, IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { faGear, faReceipt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { Nav, Navbar, Offcanvas } from "react-bootstrap";
 
@@ -10,8 +11,8 @@ import { useLayoutContext } from "../context/Layout";
 import { useWindowSize } from "../Hooks/windowsize";
 
 export default function NavComponent({
-  width = 45,
-  height = 45,
+  width = 60,
+  height = 60,
   size,
   menuItems = [],
   className = " ",
@@ -19,7 +20,7 @@ export default function NavComponent({
   width?: number;
   height?: number;
   size?: number;
-  menuItems?: Array<{ text: string; icon?: IconDefinition }>;
+  menuItems?: Array<{ text: string; icon?: IconDefinition; router: string }>;
   className?: string;
 }) {
   const [expanded, setExpanded] = useState(false);
@@ -38,7 +39,7 @@ export default function NavComponent({
         height={size ? size : height}
       />
       <div className="d-flex"></div>
-      <div className="d-flex w-100 justify-content-end">
+      <div className="d-flex w-100 align-items-center justify-content-end">
         <Navbar expand="md" expanded={expanded}>
           <Navbar.Toggle
             aria-controls="header-button"
@@ -57,21 +58,22 @@ export default function NavComponent({
             ></Offcanvas.Header>
             <Offcanvas.Body className="d-flex flex-column">
               {menuItems.map((item, index) => (
-                <Nav.Link
-                  key={index}
-                  className="mb-3 text-primary fw-bold"
-                  onClick={() => {
-                    setExpanded((prevState) => !prevState);
-                  }}
-                >
-                  {item.icon && (
-                    <FontAwesomeIcon
-                      icon={item.icon}
-                      className="text-primary"
-                    />
-                  )}{" "}
-                  {item.text}
-                </Nav.Link>
+                <Link href={`${item.router}`} key={index}>
+                  <p
+                    className="mb-3 text-primary fw-bold nav-link"
+                    onClick={() => {
+                      setExpanded((prevState) => !prevState);
+                    }}
+                  >
+                    {item.icon && (
+                      <FontAwesomeIcon
+                        icon={item.icon}
+                        className="text-primary w-50px"
+                      />
+                    )}{" "}
+                    {item.text}
+                  </p>
+                </Link>
               ))}
             </Offcanvas.Body>
           </Navbar.Offcanvas>

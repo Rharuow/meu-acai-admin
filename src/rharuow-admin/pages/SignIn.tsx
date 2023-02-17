@@ -29,7 +29,7 @@ export default function SignIn() {
     ) {
       Cookies.set("name", JSON.stringify(data.username));
       setUser({ name: data.username });
-      router.push("/dashboard");
+      router.push("/");
     } else
       Swal.fire({
         title: "Opps...",

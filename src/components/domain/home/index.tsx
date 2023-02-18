@@ -1,9 +1,19 @@
+import Lottie from "lottie-react";
 import React, { useState } from "react";
 import { Card } from "react-bootstrap";
 import Switch from "react-switch";
 
+import noOrderAnimation from "../../lottie/no-order.json";
+import waitingOrderAnimation from "../../lottie/waiting-order.json";
+
+import { mockedOrders } from "@/src/entities/Order";
+
 export default function HomePage() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const waitingOrder = mockedOrders.find((order) => order.status === "making");
+
+  console.log(waitingOrder);
 
   const handleStatus = () => {
     setIsOpen((prevState) => !prevState);
@@ -23,7 +33,31 @@ export default function HomePage() {
         </label>
       </div>
       <Card bg="primary" className="w-100">
-        <Card.Body></Card.Body>
+        <Card.Header>
+          <h1 className="text-white fs-3 text-center m-0">Últimos Pedidos</h1>
+        </Card.Header>
+        <Card.Body>
+          <Card bg="secondary">
+            <Card.Body>
+              {waitingOrder ? (
+                <div className="d-flex flex-column">
+                  <p></p>
+                </div>
+              ) : (
+                <div className="d-flex justify-content-center flex-wrap">
+                  <Lottie
+                    animationData={
+                      isOpen ? waitingOrderAnimation : noOrderAnimation
+                    }
+                  />
+                  <p className="fw-bold">
+                    {isOpen ? "Esperando por pedidos!" : "Nenhum pedido feito!"}
+                  </p>
+                </div>
+              )}
+            </Card.Body>
+          </Card>
+        </Card.Body>
       </Card>
     </div>
   );

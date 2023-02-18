@@ -40,8 +40,23 @@ export default function HomePage() {
           <Card bg="secondary">
             <Card.Body>
               {waitingOrder ? (
-                <div className="d-flex flex-column">
-                  <p></p>
+                <div className="row">
+                  <div className="col-4 pe-0">
+                    <p className="fw-bold">Pedido:</p>
+                  </div>
+                  <div className="col-8 ps-0">
+                    <p className="fw-bold">{waitingOrder.id}</p>
+                  </div>
+                  <div className="col-4 pe-0">
+                    <p className="fw-bold">Cremes:</p>
+                  </div>
+                  <div className="col-8 ps-0">
+                    <p className="fw-bold">
+                      {waitingOrder.product.creams.map((cream) => (
+                        <>{cream.name}</>
+                      ))}
+                    </p>
+                  </div>
                 </div>
               ) : (
                 <div className="d-flex justify-content-center flex-wrap">

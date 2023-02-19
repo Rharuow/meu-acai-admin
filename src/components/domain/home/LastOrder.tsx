@@ -42,22 +42,20 @@ function LastOrder({ isOpen }: { isOpen: boolean }) {
                   <p className="fw-bold">Cremes:</p>
                 </div>
                 <div className="col-6 ps-0">
-                  <p className="fw-bold">
-                    <ListGroup as="ol">
-                      {waitingOrder.product.creams.map((cream, index) => (
-                        <ListGroup.Item
-                          key={index}
-                          className={`p-1 ${
-                            index % 2 === 0
-                              ? "bg-secondary-dark"
-                              : "bg-primary text-white"
-                          }`}
-                        >
-                          {cream.name}
-                        </ListGroup.Item>
-                      ))}
-                    </ListGroup>
-                  </p>
+                  <ListGroup>
+                    {waitingOrder.product.creams.map((cream, index) => (
+                      <ListGroup.Item
+                        key={index}
+                        className={`p-1 fw-bold ${
+                          index % 2 === 0
+                            ? "bg-secondary-dark"
+                            : "bg-primary text-white"
+                        }`}
+                      >
+                        {cream.name}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
                 </div>
 
                 {waitingOrder.product.toppings && (
@@ -66,24 +64,20 @@ function LastOrder({ isOpen }: { isOpen: boolean }) {
                       <p className="fw-bold">Acomp:</p>
                     </div>
                     <div className="col-6 ps-0">
-                      <p className="fw-bold">
-                        <ListGroup as="ol">
-                          {waitingOrder.product.toppings.map(
-                            (topping, index) => (
-                              <ListGroup.Item
-                                key={index}
-                                className={` p-1 ${
-                                  index % 2 === 0
-                                    ? "bg-secondary-dark"
-                                    : "bg-primary text-white"
-                                }`}
-                              >
-                                {topping.name}
-                              </ListGroup.Item>
-                            )
-                          )}
-                        </ListGroup>
-                      </p>
+                      <ListGroup>
+                        {waitingOrder.product.toppings.map((topping, index) => (
+                          <ListGroup.Item
+                            key={index}
+                            className={`fw-bold p-1 ${
+                              index % 2 === 0
+                                ? "bg-secondary-dark"
+                                : "bg-primary text-white"
+                            }`}
+                          >
+                            {topping.name}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
                     </div>
                   </>
                 )}
@@ -94,22 +88,20 @@ function LastOrder({ isOpen }: { isOpen: boolean }) {
                       <p className="fw-bold">Extras:</p>
                     </div>
                     <div className="col-6 ps-0">
-                      <p className="fw-bold">
-                        <ListGroup as="ol">
-                          {waitingOrder.product.extras.map((extra, index) => (
-                            <ListGroup.Item
-                              key={index}
-                              className={` p-1 ${
-                                index % 2 === 0
-                                  ? "bg-secondary-dark"
-                                  : "bg-primary text-white"
-                              }`}
-                            >
-                              {extra.name}
-                            </ListGroup.Item>
-                          ))}
-                        </ListGroup>
-                      </p>
+                      <ListGroup>
+                        {waitingOrder.product.extras.map((extra, index) => (
+                          <ListGroup.Item
+                            key={index}
+                            className={`fw-bold p-1 ${
+                              index % 2 === 0
+                                ? "bg-secondary-dark"
+                                : "bg-primary text-white"
+                            }`}
+                          >
+                            {extra.name}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
                     </div>
                   </>
                 )}

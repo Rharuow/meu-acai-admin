@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import ReactLoading from "react-loading";
+import { getUsers } from "@/src/service/docs/users";
 
 interface ISessionContext {
   sessionLoading: boolean;
@@ -36,6 +37,12 @@ export default function SessionProvider({
 
   useEffect(() => {
     const userCookied = JSON.parse(Cookies.get("name") || "false");
+
+    const users = async () => {
+      console.log(await getUsers());
+    };
+
+    users();
 
     userCookied && setUser(userCookied);
 

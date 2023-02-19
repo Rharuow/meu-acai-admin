@@ -9,8 +9,6 @@ export default function HomePage() {
 
   const waitingOrder = mockedOrders.find((order) => order.status === "making");
 
-  console.log(waitingOrder);
-
   const handleStatus = () => {
     setIsOpen((prevState) => !prevState);
   };

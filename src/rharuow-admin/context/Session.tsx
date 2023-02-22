@@ -9,16 +9,23 @@ interface ISessionContext {
   user:
     | {
         name: string;
+        role: "admin";
       }
     | undefined;
   setUser: React.Dispatch<
     React.SetStateAction<
       | {
           name: string;
+          role: "admin";
         }
       | undefined
     >
   >;
+}
+
+interface IUserAdmin {
+  name: string;
+  role: "admin";
 }
 
 const SessionContext = createContext({} as ISessionContext);
@@ -31,18 +38,14 @@ export default function SessionProvider({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<{ name: string }>();
+  const [user, setUser] = useState<IUserAdmin>();
 
   const router = useRouter();
 
   useEffect(() => {
-    const userCookied = JSON.parse(Cookies.get("name") || "false");
-
-    const users = async () => {
-      console.log(await getUsers());
-    };
-
-    users();
+    const userCookied = JSON.parse(
+      Cookies.get("user") || "false"
+    ) as IUserAdmin;
 
     userCookied && setUser(userCookied);
 

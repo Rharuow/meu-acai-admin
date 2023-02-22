@@ -1,5 +1,14 @@
 import { User } from "@/src/entities/User";
-import { addDoc, deleteDoc, doc, getDocs } from "firebase/firestore";
+import {
+  addDoc,
+  collectionGroup,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  where,
+} from "firebase/firestore";
 
 import { db, userCollection } from "../firebase";
 
@@ -14,3 +23,22 @@ export const createUser = async (data: User) =>
 
 export const deleteUser = async (id: string) =>
   await deleteDoc(doc(db, "users", id));
+
+export const getAdmin = async (data: { name: string; password: string }) => {
+  const q = query(
+    collectionGroup(db, "users"),
+    where("name", "==", data.name),
+    where("password", "==", data.password)
+  );
+
+  const queryAdmin = (await getDocs(q)).docs[0]?.data();
+
+  let isAllowed = false;
+  if (queryAdmin)
+    for (const role of queryAdmin.roles) {
+      if ((await getDoc(doc(db, "roles", role.id))).data()?.name === "admin")
+        isAllowed = true;
+    }
+
+  return isAllowed;
+};

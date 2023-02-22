@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 
 import { useSessionContext } from "../context/Session";
 import Cookies from "js-cookie";
+import { getAdmin, getUsers } from "@/src/service/docs/users";
 
 type Inputs = {
   username: string;
@@ -22,13 +23,10 @@ export default function SignIn() {
 
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => {
-    if (
-      data.username === process.env.NEXT_PUBLIC_USERNAME &&
-      data.password === process.env.NEXT_PUBLIC_PASSWORD
-    ) {
-      Cookies.set("name", JSON.stringify(data.username));
-      setUser({ name: data.username });
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    if (await getAdmin({ name: data.username, password: data.password })) {
+      Cookies.set("user", JSON.stringify(data.username));
+      setUser({ name: data.username, role: "admin" });
       router.push("/");
     } else
       Swal.fire({

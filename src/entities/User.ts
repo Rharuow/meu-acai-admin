@@ -15,6 +15,7 @@ export type User = {
   name: string;
   birthday?: string;
   phone: string;
+  isActive: boolean;
   address: {
     house: number;
     square: number;
@@ -31,6 +32,7 @@ export const mockedUser: User = {
   roles: [{ id: "1", name: RolesEnum.ADMIN }],
   name: "Harysson Soares",
   phone: "+55084981758502",
+  isActive: true,
   address: {
     house: 39,
     square: 5,

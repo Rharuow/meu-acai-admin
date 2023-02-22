@@ -5,9 +5,9 @@ export enum RolesEnum {
   USER = "user",
 }
 
-export type Roles = {
+export type Role = {
   id: string;
-  name: RolesEnum;
+  name: RolesEnum.ADMIN | RolesEnum.USER;
 };
 
 export type User = {
@@ -19,6 +19,7 @@ export type User = {
     house: number;
     square: number;
   };
+  roles: Array<Role>;
   password: string;
   wallet: number;
   members?: Array<{ name: string; birthday?: string }>;
@@ -27,6 +28,7 @@ export type User = {
 
 export const mockedUser: User = {
   id: "1",
+  roles: [{ id: "1", name: RolesEnum.ADMIN }],
   name: "Harysson Soares",
   phone: "+55084981758502",
   address: {

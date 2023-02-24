@@ -38,11 +38,11 @@ svg {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: $primary;
+  background: $primaryDark;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: $primary;
+  background: $secondary;
 }

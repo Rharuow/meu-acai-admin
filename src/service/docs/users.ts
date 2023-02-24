@@ -14,7 +14,7 @@ import { db, userCollection } from "../firebase";
 
 export const getUsers = async () =>
   (await getDocs(userCollection)).docs.map((document) => ({
-    ...document.data(),
+    ...(document.data() as User),
     id: document.id,
   }));
 

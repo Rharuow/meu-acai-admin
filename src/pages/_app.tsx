@@ -10,17 +10,21 @@ import "../styles/main.scss";
 import {
   faDashboard,
   faHome,
+  faHomeAlt,
   faReceipt,
   faSignOut,
+  faUserAlt,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <SessionProvider>
       <LayoutProvider
         setMenuItems={[
-          { text: "Dashboard", icon: faDashboard, router: "/" },
+          { text: "Início", icon: faHomeAlt, router: "/" },
+          { text: "Usuários", icon: faUserAlt, router: "/users" },
           { text: "Pedidos", icon: faReceipt, router: "/pedidos" },
           { text: "Carteira", icon: faWallet, router: "/wallet" },
           { text: "Sair", icon: faSignOut, router: "/signout" },

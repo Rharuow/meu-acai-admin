@@ -32,7 +32,7 @@ export default function NavComponent({
   const { theme } = useLayoutContext();
 
   return (
-    <div className={`d-flex p-3 bg-primary rounded-bottom ${className}`}>
+    <div className={`d-flex p-3 bg-primary rounded-bottom mb-3 ${className}`}>
       <Image
         alt="logo"
         priority

@@ -17,6 +17,8 @@ import {
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
+import StatusJob from "../components/StatusJob";
+import StoreProvider from "../context/store";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -30,7 +32,10 @@ export default function App({ Component, pageProps }: AppProps) {
           { text: "Sair", icon: faSignOut, router: "/signout" },
         ]}
       >
-        <Component {...pageProps} />
+        <StoreProvider>
+          <StatusJob />
+          <Component {...pageProps} />
+        </StoreProvider>
       </LayoutProvider>
     </SessionProvider>
   );

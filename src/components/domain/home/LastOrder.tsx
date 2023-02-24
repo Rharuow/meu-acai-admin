@@ -8,9 +8,12 @@ import { glossary } from "@/src/utils/glossary";
 
 import noOrderAnimation from "../../lottie/no-order.json";
 import waitingOrderAnimation from "../../lottie/waiting-order.json";
+import { useStoreContext } from "@/src/context/store";
 
-function LastOrder({ isOpen }: { isOpen: boolean }) {
+function LastOrder() {
   const waitingOrder = mockedOrders.find((order) => order.status === "making");
+
+  const { isOpen } = useStoreContext();
 
   const handleDone = () => {};
 

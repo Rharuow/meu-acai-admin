@@ -15,17 +15,6 @@ export default function HomePage() {
 
   return (
     <div className="d-flex p-3 flex-wrap">
-      <div className="w-100 mb-3">
-        <label className="d-flex align-items-center justify-content-end">
-          <span className="text-primary-light me-3">Aberto?</span>
-          <Switch
-            onChange={handleStatus}
-            checked={isOpen}
-            onColor="#198754"
-            offColor="#ff4136"
-          />
-        </label>
-      </div>
       <LastOrder isOpen={isOpen} />
     </div>
   );

@@ -34,6 +34,7 @@ const LayoutProvider: React.FC<{
   const [classWrapper, setClassWrapper] = useState(" ");
 
   const { user } = useSessionContext();
+
   return (
     <LayoutContext.Provider
       value={{ language, setLanguage, theme, setTheme, setClassWrapper }}

@@ -24,6 +24,8 @@ export const createUser = async (data: User) =>
 export const deleteUser = async (id: string) =>
   await deleteDoc(doc(db, "users", id));
 
+export const isAdmin = async (name: string) => {};
+
 export const getAdmin = async (data: { name: string; password: string }) => {
   const q = query(
     collectionGroup(db, "users"),
@@ -35,10 +37,9 @@ export const getAdmin = async (data: { name: string; password: string }) => {
 
   let isAllowed = false;
   if (queryAdmin)
-    for (const role of queryAdmin.roles) {
+    for (const role of queryAdmin.roles)
       if ((await getDoc(doc(db, "roles", role.id))).data()?.name === "admin")
-        isAllowed = true;
-    }
+        return { name: queryAdmin.name, role: "admin" };
 
   return isAllowed;
 };

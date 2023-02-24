@@ -3,6 +3,7 @@ import { faGear, faReceipt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Nav, Navbar, Offcanvas } from "react-bootstrap";
 
@@ -25,6 +26,8 @@ export default function NavComponent({
 }) {
   const [expanded, setExpanded] = useState(false);
   const { isMobile } = useWindowSize();
+
+  const router = useRouter();
 
   const { theme } = useLayoutContext();
 
@@ -58,22 +61,22 @@ export default function NavComponent({
             ></Offcanvas.Header>
             <Offcanvas.Body className="d-flex flex-column">
               {menuItems.map((item, index) => (
-                <Link href={`${item.router}`} key={index}>
-                  <p
-                    className="mb-3 text-primary fw-bold nav-link"
-                    onClick={() => {
-                      setExpanded((prevState) => !prevState);
-                    }}
-                  >
-                    {item.icon && (
-                      <FontAwesomeIcon
-                        icon={item.icon}
-                        className="text-primary w-50px"
-                      />
-                    )}{" "}
-                    {item.text}
-                  </p>
-                </Link>
+                <Nav.Link
+                  key={index}
+                  className="mb-3 text-primary fw-bold nav-link"
+                  onClick={() => {
+                    setExpanded((prevState) => !prevState);
+                    router.push(item.router);
+                  }}
+                >
+                  {item.icon && (
+                    <FontAwesomeIcon
+                      icon={item.icon}
+                      className="text-primary w-50px"
+                    />
+                  )}{" "}
+                  {item.text}
+                </Nav.Link>
               ))}
             </Offcanvas.Body>
           </Navbar.Offcanvas>

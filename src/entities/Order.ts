@@ -1,6 +1,6 @@
 import { JobDay, mockedJobDay } from "./JobDay";
 import { mockedProduct, Product } from "./Product";
-import { mockedUser, User } from "./User";
+import { User } from "./User";
 
 export enum OrderStatus {
   "done" = "done",

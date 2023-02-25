@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Switch from "react-switch";
 import { getStatus, updateStatus } from "../service/docs/admin/status";
-import ReactLoading from "react-loading";
 import { useStoreContext } from "../context/store";
+import ReactLoading from "../rharuow-admin/components/ReactLoading";
 
 function StatusJob() {
   const {

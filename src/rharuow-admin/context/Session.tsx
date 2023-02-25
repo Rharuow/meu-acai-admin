@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import ReactLoading from "react-loading";
 import { useRouter } from "next/router";
+import ReactLoading from "../components/ReactLoading";
 
 export interface IUserAdmin {
   name: string;

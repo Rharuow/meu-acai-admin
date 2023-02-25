@@ -18,6 +18,12 @@ export const getUsers = async () =>
     id: document.id,
   }));
 
+export const getUser = async (name: string) => {
+  const user = await getDoc(doc(db, "users", name));
+  if (user.exists()) return user.data();
+  return "Usuário não encontrado!";
+};
+
 export const createUser = async (data: User) =>
   await addDoc(userCollection, data);
 

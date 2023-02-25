@@ -14,6 +14,7 @@ import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
 
 function UserList() {
   const [users, setUsers] = useState<Array<User>>([]);
+  const [loading, setLoading] = useState(true);
 
   const { user } = useSessionContext();
 
@@ -27,10 +28,9 @@ function UserList() {
       requestUsers && setUsers(requestUsers);
     };
     getUsersRequest();
+    setLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(users);
 
   return (
     <Card bg="primary">
@@ -38,7 +38,9 @@ function UserList() {
         <span className="text-secondary">Usuários</span>
       </Card.Header>
       <Card.Body>
-        {users.length > 0 ? (
+        {loading ? (
+          <></>
+        ) : users.length > 0 ? (
           <Table responsive variant="secondary" striped>
             <thead>
               <tr>

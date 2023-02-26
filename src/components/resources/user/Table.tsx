@@ -116,7 +116,10 @@ function TableComponent() {
                 className="form-control"
                 mask="+55(099)99999-9999"
                 placeholder="Digite seu número"
-                defaultValue={user?.phone}
+                {...(user &&
+                  user.phone && {
+                    defaultValue: `${phoneFormatter(user.phone)}`,
+                  })}
               />
             </Form.Group>
 

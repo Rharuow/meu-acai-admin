@@ -1,3 +1,8 @@
 export const phoneFormatter = (phone: string) => {
-  console.log(phone.split(" "));
+  const prefixPhone = phone
+    .split(" ")[1]
+    .split("")
+    .filter((l, index) => index > 1);
+
+  return prefixPhone.concat(phone.split(" ")[2]).join("");
 };

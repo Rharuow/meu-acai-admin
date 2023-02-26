@@ -1,17 +1,20 @@
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPencilAlt,
+  faTrash,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Button, ButtonGroup, Form, Modal, Table } from "react-bootstrap";
-import { useForm } from "react-hook-form";
-import InputMask from "react-input-mask";
+import { useForm, FormProvider } from "react-hook-form";
 
 import { User } from "@/src/entities/User";
 import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { timeStampToDateFormTag } from "@/src/rharuow-admin/util/dateHandler";
 import { splitString } from "@/src/rharuow-admin/util/textHandler";
-import { deleteUser, getUser } from "@/src/service/docs/users";
+import { deleteUser } from "@/src/service/docs/users";
 import { useUsersContext } from ".";
-import { phoneFormatter } from "@/src/rharuow-admin/util/phoneHandler";
+
+import Fields from "./Form/Fields";
 
 function TableComponent() {
   const { users } = useUsersContext();
@@ -19,6 +22,10 @@ function TableComponent() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [user, setUser] = useState<User>();
+
+  const { isMobile } = useWindowSize();
+
+  const methods = useForm();
 
   const handleDelete = (index: number) => {
     setUser(users[index]);
@@ -33,12 +40,6 @@ function TableComponent() {
   const onSubmit = async (data: any) => {
     console.log(data);
   };
-
-  const { isMobile } = useWindowSize();
-
-  const { register, handleSubmit } = useForm();
-
-  user && user.birthday && console.log(phoneFormatter(user.phone));
 
   return (
     <Table responsive variant="secondary" striped>
@@ -75,59 +76,34 @@ function TableComponent() {
         onHide={() => setShowEditModal(false)}
         centered
       >
-        <Modal.Body>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Form.Group className="mb-3" controlId="name">
-              <Form.Label className="fw-bold text-primary">Nome</Form.Label>
-              <Form.Control
-                {...register("name")}
-                placeholder="Ex: Fulano de tal"
-                defaultValue={user?.name}
-              />
-            </Form.Group>
+        <FormProvider {...methods}>
+          <Form onSubmit={methods.handleSubmit(onSubmit)}>
+            <Modal.Header closeButton>
+              <Modal.Title>
+                Editar {user && splitString(user.name, 1)}
+              </Modal.Title>
+            </Modal.Header>
 
-            <Form.Group className="mb-3" controlId="birthday">
-              <Form.Label className="fw-bold text-primary">
-                Aniversário
-              </Form.Label>
-              <Form.Control
-                {...register("birthday")}
-                type="date"
-                {...(user &&
-                  user.birthday && {
-                    defaultValue: `${timeStampToDateFormTag(user.birthday)}`,
-                  })}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="birthday">
-              <Form.Label className="fw-bold text-primary">Carteira</Form.Label>
-              <Form.Control
-                {...register("wallet")}
-                type="number"
-                defaultValue={user?.wallet}
-                min={0}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label className="text-primary">Telefone</Form.Label>
-              <InputMask
-                className="form-control"
-                mask="+55(099)99999-9999"
-                placeholder="Digite seu número"
-                {...(user &&
-                  user.phone && {
-                    defaultValue: `${phoneFormatter(user.phone)}`,
-                  })}
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
+            <Modal.Body>{user && <Fields user={user} />}</Modal.Body>
+            <Modal.Footer>
+              <Button
+                variant="outline-danger"
+                onClick={() => setShowEditModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="outline-success"
+                onClick={async () => {
+                  setShowEditModal(false);
+                  window.location.reload();
+                }}
+              >
+                Salvar
+              </Button>
+            </Modal.Footer>
           </Form>
-        </Modal.Body>
+        </FormProvider>
       </Modal>
 
       <thead>

@@ -10,7 +10,7 @@ export default function Create({
   children,
   action,
 }: {
-  children: JSX.Element;
+  children?: JSX.Element;
   action?: () => void;
 }) {
   const methods = useForm<Size>();

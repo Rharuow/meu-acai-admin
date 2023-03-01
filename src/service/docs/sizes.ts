@@ -36,7 +36,7 @@ export const sizeAlreadyExists = async ({
 export const deleteSize = async (id: string) =>
   await deleteDoc(doc(db, "sizes", id));
 
-export const updateUser = async (id: string, data: any) => {
+export const updateSize = async (id: string, data: any) => {
   const sizeRef = doc(db, "sizes", id);
   try {
     await updateDoc(sizeRef, data);

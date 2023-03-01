@@ -1,25 +1,55 @@
 import { Size } from "@/src/entities/Product";
-import { createSize } from "@/src/service/docs/sizes";
+import { updateSize } from "@/src/service/docs/sizes";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
+import Swal from "sweetalert2";
 import Fields from "./Form/Fields";
 
-function Edit({ size }: { size?: Size }) {
+function Edit({
+  size,
+  children,
+  action,
+}: {
+  size?: Size;
+  children?: JSX.Element;
+  action?: () => void;
+}) {
   const methods = useForm<Size>();
   const [validated, setValidated] = useState(false);
 
   const onSubmit = async (data: Size) => {
     setValidated(true);
-    // const sizeCreated = await createSize(data);
+
     const dataFormatted: Size = { ...data, value: parseFloat(`${data.value}`) };
 
-    console.log(dataFormatted);
+    const sizeEdited = size && (await updateSize(size.id, dataFormatted));
+    Swal.fire({
+      title: sizeEdited ? "Perfeito" : "Opss",
+      text: sizeEdited
+        ? "O tamanho foi editrado com sucesso!"
+        : "Os tamanos devem ter nomes diferentes...",
+      icon: sizeEdited ? "success" : "error",
+      confirmButtonText: "OK",
+    }).then(() => {
+      sizeEdited && action && action();
+    });
   };
   return (
     <FormProvider {...methods}>
       <Form validated={validated} onSubmit={methods.handleSubmit(onSubmit)}>
-        <Fields size={size} />
+        <>
+          <Fields size={size} />
+          {children ? (
+            children
+          ) : (
+            <div className="d-flex justify-content-end">
+              <Button variant="success" type="submit">
+                Salvar
+              </Button>
+            </div>
+          )}
+        </>
       </Form>
     </FormProvider>
   );

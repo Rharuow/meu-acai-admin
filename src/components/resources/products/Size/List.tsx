@@ -46,7 +46,7 @@ export default function List() {
 
   const ModalToDelete = () => (
     <Modal centered show={showDeleteModal}>
-      <Modal.Header closeButton>
+      <Modal.Header onHide={() => setShowDeleteModal(false)}>
         <Modal.Title>Apagar Tamanho</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -80,43 +80,58 @@ export default function List() {
 
   const ModalToEdit = () => (
     <Modal centered show={showEditModal}>
-      <Modal.Header>
+      <Modal.Header onHide={() => setShowEditModal(false)}>
         <Modal.Title>Editar Tamanho</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Edit size={size} />
+        <Edit
+          size={size}
+          action={async () => {
+            setShowEditModal(false);
+            await getSizes();
+          }}
+        >
+          <div className="d-flex justify-content-end">
+            <Button
+              variant="danger text-white me-2"
+              onClick={() => setShowEditModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="success" type="submit">
+              Salvar
+            </Button>
+          </div>
+        </Edit>
       </Modal.Body>
-      <Modal.Footer></Modal.Footer>
     </Modal>
   );
 
   const ModalToCreate = () => (
     <Modal centered show={showCreateModal}>
-      <>
-        <Modal.Header>
-          <Modal.Title>Criando Tamanho</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Create
-            action={async () => {
-              setShowCreateModal(false);
-              await getSizes();
-            }}
-          >
-            <div className="d-flex justify-content-end">
-              <Button
-                variant="danger text-white me-2"
-                onClick={() => setShowCreateModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button variant="success" type="submit">
-                Salvar
-              </Button>
-            </div>
-          </Create>
-        </Modal.Body>
-      </>
+      <Modal.Header onHide={() => setShowCreateModal(false)}>
+        <Modal.Title>Criando Tamanho</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Create
+          action={async () => {
+            setShowCreateModal(false);
+            await getSizes();
+          }}
+        >
+          <div className="d-flex justify-content-end">
+            <Button
+              variant="danger text-white me-2"
+              onClick={() => setShowCreateModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button variant="success" type="submit">
+              Salvar
+            </Button>
+          </div>
+        </Create>
+      </Modal.Body>
     </Modal>
   );
 

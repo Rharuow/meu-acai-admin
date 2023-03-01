@@ -7,6 +7,7 @@ import {
   getDoc,
   getDocs,
   query,
+  updateDoc,
   where,
 } from "firebase/firestore";
 
@@ -48,4 +49,14 @@ export const getAdmin = async (data: { name: string; password: string }) => {
         return { name: queryAdmin.name, role: "admin" };
 
   return isAllowed;
+};
+
+export const updateUser = async (id: string, data: any) => {
+  const userRef = doc(db, "users", id);
+  try {
+    await updateDoc(userRef, data);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };

@@ -13,6 +13,7 @@ import {
   faHomeAlt,
   faReceipt,
   faSignOut,
+  faStoreAlt,
   faUserAlt,
   faWallet,
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
         setMenuItems={[
           { text: "Início", icon: faHomeAlt, router: "/" },
           { text: "Usuários", icon: faUserAlt, router: "/users" },
+          { text: "Produto", icon: faStoreAlt, router: "/produtos" },
           { text: "Pedidos", icon: faReceipt, router: "/pedidos" },
           { text: "Carteira", icon: faWallet, router: "/wallet" },
           { text: "Sair", icon: faSignOut, router: "/signout" },

@@ -137,9 +137,9 @@ export default function List() {
 
   return (
     <>
-      {showEditModal && <ModalToEdit />}
-      {showDeleteModal && <ModalToDelete />}
-      {showCreateModal && <ModalToCreate />}
+      <ModalToEdit />
+      <ModalToDelete />
+      <ModalToCreate />
       {loading ? (
         <div className="d-flex justify-content-center align-items-center">
           <ReactLoading type="spinningBubbles" />

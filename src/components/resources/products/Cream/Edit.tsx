@@ -1,43 +1,43 @@
-import { Size } from "@/src/entities/Product";
-import { createSize } from "@/src/service/docs/sizes";
+import { Cream } from "@/src/entities/Product";
+import { updateCream } from "@/src/service/docs/creams";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Fields from "./Form/Fields";
 
-export default function Create({
+function Edit({
+  cream,
   children,
   action,
 }: {
+  cream?: Cream;
   children?: JSX.Element;
   action?: () => void;
 }) {
-  const methods = useForm<Size>();
+  const methods = useForm<Cream>();
   const [validated, setValidated] = useState(false);
 
-  const onSubmit = async (data: Size) => {
+  const onSubmit = async (data: Cream) => {
     setValidated(true);
 
-    const dataFormatted: Size = { ...data, value: parseFloat(`${data.value}`) };
-
-    const sizeCreated = await createSize(dataFormatted);
+    const creamEdited = cream && (await updateCream(cream.id, data));
     Swal.fire({
-      title: sizeCreated ? "Perfeito" : "Opss",
-      text: sizeCreated
-        ? "O tamanho foi criado com sucesso!"
-        : "Os tamanhos devem ter nomes diferentes...",
-      icon: sizeCreated ? "success" : "error",
+      title: creamEdited ? "Perfeito" : "Opss",
+      text: creamEdited
+        ? "O creme foi editado com sucesso!"
+        : "Os cremes devem ter nomes diferentes...",
+      icon: creamEdited ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {
-      sizeCreated && action && action();
+      creamEdited && action && action();
     });
   };
   return (
     <FormProvider {...methods}>
       <Form validated={validated} onSubmit={methods.handleSubmit(onSubmit)}>
         <>
-          <Fields />
+          <Fields cream={cream} />
           {children ? (
             children
           ) : (
@@ -52,3 +52,5 @@ export default function Create({
     </FormProvider>
   );
 }
+
+export default Edit;

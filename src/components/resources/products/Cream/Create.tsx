@@ -1,5 +1,5 @@
-import { Size } from "@/src/entities/Product";
-import { createSize } from "@/src/service/docs/sizes";
+import { Cream } from "@/src/entities/Product";
+import { createCream } from "@/src/service/docs/creams";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
@@ -13,24 +13,22 @@ export default function Create({
   children?: JSX.Element;
   action?: () => void;
 }) {
-  const methods = useForm<Size>();
+  const methods = useForm<Cream>();
   const [validated, setValidated] = useState(false);
 
-  const onSubmit = async (data: Size) => {
+  const onSubmit = async (data: Cream) => {
     setValidated(true);
 
-    const dataFormatted: Size = { ...data, value: parseFloat(`${data.value}`) };
-
-    const sizeCreated = await createSize(dataFormatted);
+    const creamCreated = await createCream(data);
     Swal.fire({
-      title: sizeCreated ? "Perfeito" : "Opss",
-      text: sizeCreated
-        ? "O tamanho foi criado com sucesso!"
-        : "Os tamanhos devem ter nomes diferentes...",
-      icon: sizeCreated ? "success" : "error",
+      title: creamCreated ? "Perfeito" : "Opss",
+      text: creamCreated
+        ? "O creme foi criado com sucesso!"
+        : "Os cremes devem ter nomes diferentes...",
+      icon: creamCreated ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {
-      sizeCreated && action && action();
+      creamCreated && action && action();
     });
   };
   return (

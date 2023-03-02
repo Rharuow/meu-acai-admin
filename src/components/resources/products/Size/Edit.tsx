@@ -27,8 +27,8 @@ function Edit({
     Swal.fire({
       title: sizeEdited ? "Perfeito" : "Opss",
       text: sizeEdited
-        ? "O tamanho foi editrado com sucesso!"
-        : "Os tamanos devem ter nomes diferentes...",
+        ? "O tamanho foi editado com sucesso!"
+        : "Os tamanhos devem ter nomes diferentes...",
       icon: sizeEdited ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {

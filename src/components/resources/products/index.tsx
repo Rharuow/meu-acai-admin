@@ -1,6 +1,6 @@
 import React from "react";
 import { Accordion } from "react-bootstrap";
-import CreateSize from "./Size/Create";
+import ListCream from "./Cream/List";
 import ListSize from "./Size/List";
 
 function ProductsPage() {
@@ -8,10 +8,18 @@ function ProductsPage() {
     <Accordion>
       <Accordion.Item eventKey="1">
         <Accordion.Header className="fw-bold text-primary">
-          Tamanho
+          Tamanhos
         </Accordion.Header>
         <Accordion.Body className="bg-secondary px-1">
           <ListSize />
+        </Accordion.Body>
+      </Accordion.Item>
+      <Accordion.Item eventKey="2">
+        <Accordion.Header className="fw-bold text-primary">
+          Cremes
+        </Accordion.Header>
+        <Accordion.Body className="bg-secondary px-1">
+          <ListCream />
         </Accordion.Body>
       </Accordion.Item>
     </Accordion>

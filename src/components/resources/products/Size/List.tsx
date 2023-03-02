@@ -5,7 +5,6 @@ import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
-import { useForm } from "react-hook-form";
 import ReactLoading from "react-loading";
 import Create from "./Create";
 import Edit from "./Edit";
@@ -30,10 +29,6 @@ export default function List() {
     setShowEditModal(true);
   };
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-  };
-
   const getSizes = async () => {
     const sizesRecovery = await listSize();
     setSizes(sizesRecovery);
@@ -43,97 +38,6 @@ export default function List() {
   useEffect(() => {
     getSizes();
   }, []);
-
-  const ModalToDelete = () => (
-    <Modal centered show={showDeleteModal}>
-      <Modal.Header onHide={() => setShowDeleteModal(false)}>
-        <Modal.Title>Apagar Tamanho</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>
-          Vc tem certeza que deseja apagar o tamanho{" "}
-          <strong>{size?.name}</strong>?
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          variant="danger text-white"
-          onClick={() => setShowDeleteModal(false)}
-        >
-          Cancel
-        </Button>
-        <Button
-          variant="success text-white"
-          onClick={async () => {
-            setLoading(true);
-            setShowDeleteModal(false);
-            size && (await deleteSize(size.id));
-            await getSizes();
-            setLoading(false);
-          }}
-        >
-          Delete
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-
-  const ModalToEdit = () => (
-    <Modal centered show={showEditModal}>
-      <Modal.Header onHide={() => setShowEditModal(false)}>
-        <Modal.Title>Editar Tamanho</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Edit
-          size={size}
-          action={async () => {
-            setShowEditModal(false);
-            await getSizes();
-          }}
-        >
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="danger text-white me-2"
-              onClick={() => setShowEditModal(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="success" type="submit">
-              Salvar
-            </Button>
-          </div>
-        </Edit>
-      </Modal.Body>
-    </Modal>
-  );
-
-  const ModalToCreate = () => (
-    <Modal centered show={showCreateModal}>
-      <Modal.Header onHide={() => setShowCreateModal(false)}>
-        <Modal.Title>Criando Tamanho</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Create
-          action={async () => {
-            setShowCreateModal(false);
-            await getSizes();
-          }}
-        >
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="danger text-white me-2"
-              onClick={() => setShowCreateModal(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="success" type="submit">
-              Salvar
-            </Button>
-          </div>
-        </Create>
-      </Modal.Body>
-    </Modal>
-  );
 
   return (
     <>
@@ -163,8 +67,65 @@ export default function List() {
           </Edit>
         </Modal.Body>
       </Modal>
-      <ModalToDelete />
-      <ModalToCreate />
+
+      <Modal centered show={showDeleteModal}>
+        <Modal.Header onHide={() => setShowDeleteModal(false)}>
+          <Modal.Title>Apagar Tamanho</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            Vc tem certeza que deseja apagar o tamanho{" "}
+            <strong>{size?.name}</strong>?
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="danger text-white"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="success text-white"
+            onClick={async () => {
+              setLoading(true);
+              setShowDeleteModal(false);
+              size && (await deleteSize(size.id));
+              await getSizes();
+              setLoading(false);
+            }}
+          >
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      <Modal centered show={showCreateModal}>
+        <Modal.Header onHide={() => setShowCreateModal(false)}>
+          <Modal.Title>Criando Tamanho</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Create
+            action={async () => {
+              setShowCreateModal(false);
+              await getSizes();
+            }}
+          >
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="danger text-white me-2"
+                onClick={() => setShowCreateModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="success" type="submit">
+                Salvar
+              </Button>
+            </div>
+          </Create>
+        </Modal.Body>
+      </Modal>
+
       {loading ? (
         <div className="d-flex justify-content-center align-items-center">
           <ReactLoading type="spinningBubbles" />

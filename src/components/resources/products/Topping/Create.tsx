@@ -1,48 +1,46 @@
-import { Size } from "@/src/entities/Product";
-import { updateSize } from "@/src/service/docs/sizes";
+import { Topping } from "@/src/entities/Product";
+import { createTopping } from "@/src/service/docs/toppings";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import Fields from "./Form/Fields";
 
-function Edit({
-  size,
+export default function Create({
   children,
   action,
 }: {
-  size?: Size;
   children?: JSX.Element;
   action?: () => void;
 }) {
-  const methods = useForm<Size>();
+  const methods = useForm<Topping>();
   const [validated, setValidated] = useState(false);
 
-  const onSubmit = async (data: Size) => {
+  const onSubmit = async (data: Topping) => {
     setValidated(true);
 
-    const dataFormatted: Size = {
+    const dataFormatted: Topping = {
       ...data,
-      value: parseFloat(`${data.value}`.replace(/,/g, ".")),
+      value: parseFloat(`${data.value}`),
     };
 
-    const sizeEdited = size && (await updateSize(size.id, dataFormatted));
+    const toppingCreated = await createTopping(dataFormatted);
     Swal.fire({
-      title: sizeEdited ? "Perfeito" : "Opss",
-      text: sizeEdited
-        ? "O tamanho foi editado com sucesso!"
-        : "Os tamanhos devem ter nomes diferentes...",
-      icon: sizeEdited ? "success" : "error",
+      title: toppingCreated ? "Perfeito" : "Opss",
+      text: toppingCreated
+        ? "O acompanhamento foi criado com sucesso!"
+        : "Os acompanhamentos devem ter nomes diferentes...",
+      icon: toppingCreated ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {
-      sizeEdited && action && action();
+      toppingCreated && action && action();
     });
   };
   return (
     <FormProvider {...methods}>
       <Form validated={validated} onSubmit={methods.handleSubmit(onSubmit)}>
         <>
-          <Fields size={size} />
+          <Fields />
           {children ? (
             children
           ) : (
@@ -57,5 +55,3 @@ function Edit({
     </FormProvider>
   );
 }
-
-export default Edit;

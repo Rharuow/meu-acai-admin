@@ -1,5 +1,5 @@
-import { Size } from "@/src/entities/Product";
-import { updateSize } from "@/src/service/docs/sizes";
+import { Topping } from "@/src/entities/Product";
+import { updateTopping } from "@/src/service/docs/toppings";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
@@ -7,42 +7,43 @@ import Swal from "sweetalert2";
 import Fields from "./Form/Fields";
 
 function Edit({
-  size,
+  topping,
   children,
   action,
 }: {
-  size?: Size;
+  topping?: Topping;
   children?: JSX.Element;
   action?: () => void;
 }) {
-  const methods = useForm<Size>();
+  const methods = useForm<Topping>();
   const [validated, setValidated] = useState(false);
 
-  const onSubmit = async (data: Size) => {
+  const onSubmit = async (data: Topping) => {
     setValidated(true);
 
-    const dataFormatted: Size = {
+    const dataFormatted: Topping = {
       ...data,
       value: parseFloat(`${data.value}`.replace(/,/g, ".")),
     };
 
-    const sizeEdited = size && (await updateSize(size.id, dataFormatted));
+    const toppingEdited =
+      topping && (await updateTopping(topping.id, dataFormatted));
     Swal.fire({
-      title: sizeEdited ? "Perfeito" : "Opss",
-      text: sizeEdited
-        ? "O tamanho foi editado com sucesso!"
-        : "Os tamanhos devem ter nomes diferentes...",
-      icon: sizeEdited ? "success" : "error",
+      title: toppingEdited ? "Perfeito" : "Opss",
+      text: toppingEdited
+        ? "O acompanhamento foi editado com sucesso!"
+        : "Os acompanhamentos devem ter nomes diferentes...",
+      icon: toppingEdited ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {
-      sizeEdited && action && action();
+      toppingEdited && action && action();
     });
   };
   return (
     <FormProvider {...methods}>
       <Form validated={validated} onSubmit={methods.handleSubmit(onSubmit)}>
         <>
-          <Fields size={size} />
+          <Fields topping={topping} />
           {children ? (
             children
           ) : (

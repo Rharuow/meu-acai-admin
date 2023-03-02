@@ -153,7 +153,10 @@ export default function List() {
                         {s.name}
                       </td>
                       <td className="fw-bold text-center align-middle p-1 text-primary">
-                        {s.value}
+                        R${" "}
+                        {s.value.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
                       <td className="fw-bold text-center align-middle p-1 text-primary">
                         {s.amountOptions}

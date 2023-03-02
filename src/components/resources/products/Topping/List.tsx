@@ -1,6 +1,6 @@
-import { Cream, Creams } from "@/src/entities/Product";
+import { Topping } from "@/src/entities/Product";
 import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { deleteCream, listCreams } from "@/src/service/docs/creams";
+import { deleteTopping, listTopping } from "@/src/service/docs/toppings";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -11,8 +11,8 @@ import Edit from "./Edit";
 
 export default function List() {
   const [loading, setLoading] = useState(true);
-  const [creams, setCreams] = useState<Creams>([]);
-  const [cream, setCream] = useState<Cream>();
+  const [toppings, setToppings] = useState<Array<Topping>>([]);
+  const [topping, setTopping] = useState<Topping>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -20,37 +20,37 @@ export default function List() {
   const { isMobile } = useWindowSize();
 
   const handleDelete = (index: number) => {
-    setCream(creams[index]);
+    setTopping(toppings[index]);
     setShowDeleteModal(true);
   };
 
   const handleEdit = (index: number) => {
-    setCream(creams[index]);
+    setTopping(toppings[index]);
     setShowEditModal(true);
   };
 
-  const getcreams = async () => {
-    const creamsRecovery = await listCreams();
-    setCreams(creamsRecovery);
+  const getToppings = async () => {
+    const toppingsRecovery = await listTopping();
+    setToppings(toppingsRecovery);
     setLoading(false);
   };
 
   useEffect(() => {
-    getcreams();
+    getToppings();
   }, []);
 
   return (
     <>
       <Modal centered show={showEditModal}>
         <Modal.Header onHide={() => setShowEditModal(false)}>
-          <Modal.Title>Editar Creme</Modal.Title>
+          <Modal.Title>Editar Acompanhamento</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Edit
-            cream={cream}
+            topping={topping}
             action={async () => {
               setShowEditModal(false);
-              await getcreams();
+              await getToppings();
             }}
           >
             <div className="d-flex justify-content-end">
@@ -70,12 +70,12 @@ export default function List() {
 
       <Modal centered show={showDeleteModal}>
         <Modal.Header onHide={() => setShowDeleteModal(false)}>
-          <Modal.Title>Apagar Creme</Modal.Title>
+          <Modal.Title>Apagar Acompanhamento</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-            Vc tem certeza que deseja apagar o creme{" "}
-            <strong>{cream?.name}</strong>?
+            Vc tem certeza que deseja apagar o acompanhamento{" "}
+            <strong>{topping?.name}</strong>?
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -90,8 +90,8 @@ export default function List() {
             onClick={async () => {
               setLoading(true);
               setShowDeleteModal(false);
-              cream && (await deleteCream(cream.id));
-              await getcreams();
+              topping && (await deleteTopping(topping.id));
+              await getToppings();
               setLoading(false);
             }}
           >
@@ -102,13 +102,13 @@ export default function List() {
 
       <Modal centered show={showCreateModal}>
         <Modal.Header onHide={() => setShowCreateModal(false)}>
-          <Modal.Title>Criando Creme</Modal.Title>
+          <Modal.Title>Criando Acompanhamento</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Create
             action={async () => {
               setShowCreateModal(false);
-              await getcreams();
+              await getToppings();
             }}
           >
             <div className="d-flex justify-content-end">
@@ -132,25 +132,33 @@ export default function List() {
         </div>
       ) : (
         <div className="d-flex justify-content-center flex-wrap align-items-center">
-          {creams.length > 0 ? (
+          {toppings.length > 0 ? (
             <>
               <Table responsive variant="secondary" striped>
                 <thead>
                   <tr>
                     <th className=" text-center text-truncate">Nome</th>
-                    <th className=" text-center text-truncate">Estoque</th>
+                    <th className=" text-center text-truncate">Valor</th>
+                    <th className="text-center text-truncate">Estoque</th>
                     <th className="text-center text-truncate">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {creams.map((c, index) => (
-                    <tr key={c.id}>
+                  {toppings.map((t, index) => (
+                    <tr key={t.id}>
                       <td className="fw-bold text-center align-middle p-1 text-primary">
-                        {c.name}
+                        {t.name}
                       </td>
                       <td className="fw-bold text-center align-middle p-1 text-primary">
-                        {c.amount} {c.unit}
+                        R${" "}
+                        {t.value.toLocaleString("pt-BR", {
+                          minimumFractionDigits: 2,
+                        })}
                       </td>
+                      <td className="fw-bold text-center align-middle p-1 text-primary">
+                        {t.amount} {t.unit}
+                      </td>
+
                       <td className="align-middle">
                         <div className="d-flex">
                           {isMobile ? (
@@ -196,14 +204,14 @@ export default function List() {
                 </tbody>
               </Table>
               <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
-                Add Creme
+                Add Acompanhamento
               </Button>
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">
-              <p className="fw-bold mb-0">Nenhum creme cadastrado</p>
+              <p className="fw-bold mb-0">Nenhum acompanhamento cadastrado</p>
               <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
-                Criar Creme
+                Criar Acompanhamento
               </Button>
             </div>
           )}

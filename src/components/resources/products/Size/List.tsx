@@ -137,7 +137,32 @@ export default function List() {
 
   return (
     <>
-      <ModalToEdit />
+      <Modal centered show={showEditModal}>
+        <Modal.Header onHide={() => setShowEditModal(false)}>
+          <Modal.Title>Editar Tamanho</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Edit
+            size={size}
+            action={async () => {
+              setShowEditModal(false);
+              await getSizes();
+            }}
+          >
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="danger text-white me-2"
+                onClick={() => setShowEditModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button variant="success" type="submit">
+                Salvar
+              </Button>
+            </div>
+          </Edit>
+        </Modal.Body>
+      </Modal>
       <ModalToDelete />
       <ModalToCreate />
       {loading ? (

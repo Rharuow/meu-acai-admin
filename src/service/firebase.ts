@@ -26,4 +26,5 @@ export const userCollection = collection(db, "users");
 export const adminCollection = collection(db, "admin");
 export const sizeCollection = collection(db, "sizes");
 export const toppingCollection = collection(db, "toppings");
+export const menuCollection = collection(db, "menus");
 export const creamCollection = collection(db, "creams");

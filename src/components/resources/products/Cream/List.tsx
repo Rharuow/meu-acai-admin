@@ -1,4 +1,4 @@
-import { Cream, Creams } from "@/src/entities/Product";
+import { Cream } from "@/src/entities/Product";
 import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
 import { deleteCream, listCreams } from "@/src/service/docs/creams";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
@@ -6,16 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
+import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
 export default function List() {
   const [loading, setLoading] = useState(true);
-  const [creams, setCreams] = useState<Creams>([]);
   const [cream, setCream] = useState<Cream>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  const { productSetLoading, creams } = useProductContext();
 
   const { isMobile } = useWindowSize();
 
@@ -29,14 +31,8 @@ export default function List() {
     setShowEditModal(true);
   };
 
-  const getcreams = async () => {
-    const creamsRecovery = await listCreams();
-    setCreams(creamsRecovery);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    getcreams();
+    setLoading(false);
   }, []);
 
   return (
@@ -50,7 +46,6 @@ export default function List() {
             cream={cream}
             action={async () => {
               setShowEditModal(false);
-              await getcreams();
             }}
           >
             <div className="d-flex justify-content-end">
@@ -91,7 +86,7 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               cream && (await deleteCream(cream.id));
-              await getcreams();
+              productSetLoading(true);
               setLoading(false);
             }}
           >
@@ -108,7 +103,7 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              await getcreams();
+              productSetLoading(true);
             }}
           >
             <div className="d-flex justify-content-end">

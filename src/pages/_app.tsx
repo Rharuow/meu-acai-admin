@@ -30,7 +30,6 @@ export default function App({ Component, pageProps }: AppProps) {
           { text: "Usuários", icon: faUserAlt, router: "/users" },
           { text: "Produto", icon: faStoreAlt, router: "/produtos" },
           { text: "Pedidos", icon: faReceipt, router: "/pedidos" },
-          { text: "Carteira", icon: faWallet, router: "/wallet" },
           { text: "Sair", icon: faSignOut, router: "/signout" },
         ]}
       >

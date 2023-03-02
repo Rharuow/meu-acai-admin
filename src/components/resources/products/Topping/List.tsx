@@ -6,16 +6,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
+import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
 export default function List() {
   const [loading, setLoading] = useState(true);
-  const [toppings, setToppings] = useState<Array<Topping>>([]);
   const [topping, setTopping] = useState<Topping>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  const { toppings, productSetLoading } = useProductContext();
 
   const { isMobile } = useWindowSize();
 
@@ -29,14 +31,8 @@ export default function List() {
     setShowEditModal(true);
   };
 
-  const getToppings = async () => {
-    const toppingsRecovery = await listTopping();
-    setToppings(toppingsRecovery);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    getToppings();
+    setLoading(false);
   }, []);
 
   return (
@@ -50,7 +46,7 @@ export default function List() {
             topping={topping}
             action={async () => {
               setShowEditModal(false);
-              await getToppings();
+              productSetLoading(true);
             }}
           >
             <div className="d-flex justify-content-end">
@@ -91,7 +87,7 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               topping && (await deleteTopping(topping.id));
-              await getToppings();
+              productSetLoading(true);
               setLoading(false);
             }}
           >
@@ -108,7 +104,7 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              await getToppings();
+              productSetLoading(true);
             }}
           >
             <div className="d-flex justify-content-end">

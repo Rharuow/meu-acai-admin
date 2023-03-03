@@ -1,5 +1,5 @@
-import { JobDay, mockedJobDay } from "./JobDay";
-import { mockedProduct, Product } from "./Product";
+import { JobDay } from "./JobDay";
+import { Menu } from "./Product";
 import { User } from "./User";
 
 export enum OrderStatus {
@@ -20,7 +20,7 @@ export type Order = {
   payment_date?: string;
   created_at: string;
   user: User;
-  product: Product;
+  product: Menu;
   jobDay: JobDay;
 };
 

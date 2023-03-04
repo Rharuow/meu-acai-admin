@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Creams, Size, Toppings } from "@/src/entities/Product";
 import ReactLoadingComponent from "@/src/rharuow-admin/components/ReactLoading";
-import { listCreams } from "@/src/service/docs/creams";
-import { listSize } from "@/src/service/docs/sizes";
-import { listTopping } from "@/src/service/docs/toppings";
+import { getCreamTotalPage, listCreams } from "@/src/service/docs/creams";
+import { listSize, getSizeTotalPage } from "@/src/service/docs/sizes";
+import { getToppingTotalPage, getToppings } from "@/src/service/docs/toppings";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Accordion } from "react-bootstrap";
 import ListCream from "./Cream/List";
@@ -15,10 +15,22 @@ const ProductContext = createContext(
   {} as {
     productLoading: boolean;
     productSetLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
+    creamsTotalPage: number;
+    setCreamsTotalPage: React.Dispatch<React.SetStateAction<number>>;
+
     creams: Creams;
     setCreams: React.Dispatch<React.SetStateAction<Creams>>;
+
+    toppingsTotalPage: number;
+    setToppingsTotalPage: React.Dispatch<React.SetStateAction<number>>;
+
     toppings: Toppings;
     setToppings: React.Dispatch<React.SetStateAction<Toppings>>;
+
+    sizesTotalPage: number;
+    setSizesTotalPage: React.Dispatch<React.SetStateAction<number>>;
+
     sizes: Array<Size>;
     setSizes: React.Dispatch<React.SetStateAction<Array<Size>>>;
   }
@@ -28,32 +40,47 @@ export const useProductContext = () => useContext(ProductContext);
 
 function ProductsPage() {
   const [loading, setLoading] = useState(true);
-  const [hasProducts, setHasProducts] = useState<boolean>();
+
+  const [sizes, setSizes] = useState<Array<Size>>([]);
+  const [sizesPage, setSizesPage] = useState<number>(1);
+  const [sizesTotalPage, setSizesTotalPage] = useState<number>(1);
 
   const [toppings, setToppings] = useState<Toppings>([]);
+  const [toppingsPage, setToppingsPage] = useState<number>(1);
+  const [toppingsTotalPage, setToppingsTotalPage] = useState<number>(1);
+
   const [creams, setCreams] = useState<Creams>([]);
-  const [sizes, setSizes] = useState<Array<Size>>([]);
+  const [creamsPage, setCreamsPage] = useState<number>(1);
+  const [creamsTotalPage, setCreamsTotalPage] = useState<number>(1);
 
   const loadConditions = async () => {
-    const getToppings = await listTopping();
-    setToppings(getToppings);
-    const getCreams = await listCreams();
-    setCreams(getCreams);
-    const getSizes = await listSize();
-    setSizes(getSizes);
-    const conditions =
-      getToppings.length > 0 && getCreams.length > 0 && getSizes.length > 0;
-    setHasProducts(conditions);
+    setToppings(await getToppings());
+    setToppingsTotalPage(await getToppingTotalPage());
+
+    setCreams(await listCreams());
+    setCreamsTotalPage(await getCreamTotalPage());
+
+    setSizes(await listSize());
+    setSizesTotalPage(await getSizeTotalPage());
+
+    // TO-DO
+
     setLoading(false);
   };
 
   useEffect(() => {
-    loadConditions();
-  }, [toppings, creams, sizes]);
+    loading && loadConditions();
+  }, []);
 
   return (
     <ProductContext.Provider
       value={{
+        creamsTotalPage,
+        setCreamsTotalPage,
+        setToppingsTotalPage,
+        toppingsTotalPage,
+        sizesTotalPage,
+        setSizesTotalPage,
         productLoading: loading,
         productSetLoading: setLoading,
         creams,
@@ -94,16 +121,15 @@ function ProductsPage() {
               <ListTopping />
             </Accordion.Body>
           </Accordion.Item>
-          {hasProducts && (
-            <Accordion.Item eventKey="4">
-              <Accordion.Header className="fw-bold text-primary">
-                La carte
-              </Accordion.Header>
-              <Accordion.Body className="bg-secondary px-1">
-                <ListMenu />
-              </Accordion.Body>
-            </Accordion.Item>
-          )}
+
+          <Accordion.Item eventKey="4">
+            <Accordion.Header className="fw-bold text-primary">
+              La carte
+            </Accordion.Header>
+            <Accordion.Body className="bg-secondary px-1">
+              <ListMenu />
+            </Accordion.Body>
+          </Accordion.Item>
         </Accordion>
       )}
     </ProductContext.Provider>

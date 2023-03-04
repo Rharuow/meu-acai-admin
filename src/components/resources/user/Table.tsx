@@ -38,7 +38,7 @@ function TableComponent() {
   };
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    // console.log(data);
   };
 
   return (

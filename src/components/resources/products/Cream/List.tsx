@@ -4,26 +4,35 @@ import { deleteCream, listCreams } from "@/src/service/docs/creams";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Modal, Pagination, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
 import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
 export default function List() {
+  const { productSetLoading, creams, creamsTotalPage, setCreams } =
+    useProductContext();
+  const pages = Array.from({ length: creamsTotalPage }, (_, i) => i + 1);
   const [loading, setLoading] = useState(true);
   const [cream, setCream] = useState<Cream>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-
-  const { productSetLoading, creams } = useProductContext();
+  const [currentPage, setCurrentPage] = useState(pages[pages.length - 1]);
 
   const { isMobile } = useWindowSize();
 
   const handleDelete = (index: number) => {
     setCream(creams[index]);
     setShowDeleteModal(true);
+  };
+
+  const handlePagination = async (e: any) => {
+    setLoading(true);
+    setCreams(await listCreams(parseInt(e.target.innerHTML)));
+    setCurrentPage(pages[pages.length - 1]);
+    setLoading(false);
   };
 
   const handleEdit = (index: number) => {
@@ -190,9 +199,26 @@ export default function List() {
                   ))}
                 </tbody>
               </Table>
-              <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
-                Add Creme
-              </Button>
+              <div className="d-flex flex-wrap mt-3 justify-content-center">
+                {pages.length > 1 && (
+                  <Pagination>
+                    {pages.map((page) => (
+                      <Pagination.Item
+                        key={page}
+                        active={page === currentPage}
+                        onClick={(e) => handlePagination(e)}
+                      >
+                        {page}
+                      </Pagination.Item>
+                    ))}
+                  </Pagination>
+                )}
+                <div className="d-flex justify-content-center w-100">
+                  <Button onClick={() => setShowCreateModal(true)}>
+                    Add Creme
+                  </Button>
+                </div>
+              </div>
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">

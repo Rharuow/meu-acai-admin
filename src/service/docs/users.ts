@@ -6,18 +6,39 @@ import {
   doc,
   getDoc,
   getDocs,
+  limit,
+  orderBy,
   query,
+  startAfter,
   updateDoc,
   where,
 } from "firebase/firestore";
 
 import { db, userCollection } from "../firebase";
 
-export const getUsers = async () =>
-  (await getDocs(userCollection)).docs.map((document) => ({
-    ...(document.data() as User),
-    id: document.id,
-  }));
+let lastVisible: any = false;
+
+export const getUsers = async (page: number = 1, perPage: number = 10) => {
+  const q = lastVisible
+    ? query(
+        userCollection,
+        orderBy("name"),
+        startAfter(lastVisible),
+        limit(perPage)
+      )
+    : query(userCollection, orderBy("name"), limit(perPage));
+  const users = await getDocs(q);
+
+  lastVisible = page > 1 ? users.docs[users.docs.length - 1] : false;
+
+  return users.docs.map(
+    (doc) =>
+      ({
+        ...(doc.data() as User),
+        id: doc.id,
+      } as User)
+  );
+};
 
 export const getUser = async (name: string) => {
   const user = await getDoc(doc(db, "users", name));

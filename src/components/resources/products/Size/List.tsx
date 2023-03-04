@@ -4,26 +4,37 @@ import { deleteSize, listSize } from "@/src/service/docs/sizes";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Modal, Pagination, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
 import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
 export default function List() {
+  const { productSetLoading, sizes, sizesTotalPage, setSizes } =
+    useProductContext();
+
   const [loading, setLoading] = useState(true);
   const [size, setSize] = useState<Size>();
+  const [currentPage, setCurrentPage] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const { productSetLoading, sizes } = useProductContext();
+  const pages = Array.from({ length: sizesTotalPage }, (_, i) => i + 1);
 
   const { isMobile } = useWindowSize();
 
   const handleDelete = (index: number) => {
     setSize(sizes[index]);
     setShowDeleteModal(true);
+  };
+
+  const handlePagination = async (e: any) => {
+    setLoading(true);
+    setSizes(await listSize(parseInt(e.target.innerHTML)));
+    setCurrentPage(parseInt(e.target.innerHTML));
+    setLoading(false);
   };
 
   const handleEdit = (index: number) => {
@@ -204,9 +215,26 @@ export default function List() {
                   ))}
                 </tbody>
               </Table>
-              <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
-                Add Tamanho
-              </Button>
+              <div className="d-flex flex-wrap mt-3 justify-content-center">
+                {pages.length > 1 && (
+                  <Pagination>
+                    {pages.map((page) => (
+                      <Pagination.Item
+                        key={page}
+                        active={page === currentPage}
+                        onClick={(e) => handlePagination(e)}
+                      >
+                        {page}
+                      </Pagination.Item>
+                    ))}
+                  </Pagination>
+                )}
+                <div className="d-flex justify-content-center w-100">
+                  <Button onClick={() => setShowCreateModal(true)}>
+                    Add Tamanho
+                  </Button>
+                </div>
+              </div>
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">

@@ -1,23 +1,47 @@
-import { Topping } from "@/src/entities/Product";
-import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { deleteTopping, listTopping } from "@/src/service/docs/toppings";
+import LottiePlayer from "lottie-react";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Modal, Pagination, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
 import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
+import { Topping } from "@/src/entities/Product";
+import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
+import {
+  deleteTopping,
+  getToppingTotalPage,
+  getToppings,
+  getAllTopping,
+} from "@/src/service/docs/toppings";
+import finishedAnimation from "@/src/components/lottie/finished.json";
+
 export default function List() {
+  const {
+    toppings,
+    toppingsTotalPage,
+    setToppingsTotalPage,
+    setToppings,
+    productSetLoading,
+  } = useProductContext();
+
   const [loading, setLoading] = useState(true);
+  const [loadingToppings, setLoadingToppings] = useState(false);
   const [topping, setTopping] = useState<Topping>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { toppings, productSetLoading } = useProductContext();
+  const handlePagination = async () => {
+    setLoadingToppings(true);
+    const newToppgings = await getToppings(currentPage + 1);
+    setToppings((prevState) => [...prevState, ...newToppgings]);
+    setCurrentPage(currentPage + 1);
+    setLoadingToppings(false);
+  };
 
   const { isMobile } = useWindowSize();
 
@@ -34,6 +58,8 @@ export default function List() {
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  console.log("toppings = ", toppings);
 
   return (
     <>
@@ -87,7 +113,10 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               topping && (await deleteTopping(topping.id));
-              productSetLoading(true);
+              const allToppings = await getAllTopping();
+              toppings && setToppings(await getToppings(1, toppings.length));
+              setCurrentPage(allToppings.length);
+              setToppingsTotalPage(allToppings.length);
               setLoading(false);
             }}
           >
@@ -104,7 +133,10 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              productSetLoading(true);
+              const toppingsTotalPage = await getToppingTotalPage();
+              setToppings(await getAllTopping());
+              setToppingsTotalPage(toppingsTotalPage);
+              setCurrentPage(toppingsTotalPage);
             }}
           >
             <div className="d-flex justify-content-end">
@@ -197,11 +229,50 @@ export default function List() {
                       </td>
                     </tr>
                   ))}
+                  {loadingToppings && (
+                    <tr>
+                      <td colSpan={4}>
+                        <div className="d-flex justify-content-center">
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#46295a"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className={toppingsTotalPage >= currentPage ? " " : "p-0"}
+                    >
+                      {toppingsTotalPage >= currentPage + 1 ? (
+                        <div className="d-flex justify-content-center">
+                          <Button
+                            className="success-outline"
+                            onClick={() => handlePagination()}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      ) : (
+                        <LottiePlayer
+                          animationData={finishedAnimation}
+                          className="h-80px"
+                        />
+                      )}
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
-              <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
-                Add Acompanhamento
-              </Button>
+
+              <div className="d-flex justify-content-center w-100">
+                <Button onClick={() => setShowCreateModal(true)}>
+                  Add Acompanhamento
+                </Button>
+              </div>
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">

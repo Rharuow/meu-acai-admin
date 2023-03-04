@@ -7,7 +7,5 @@ export const phoneFormatter = (phone: string) => {
     )
     .join("");
 
-  console.log(prefixPhone);
-
   return prefixPhone;
 };

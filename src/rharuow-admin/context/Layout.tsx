@@ -49,8 +49,6 @@ const LayoutProvider: React.FC<{
 
   const router = useRouter();
 
-  console.log(user);
-
   return (
     <LayoutContext.Provider
       value={{ language, setLanguage, theme, setTheme, setClassWrapper }}

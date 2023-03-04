@@ -64,7 +64,10 @@ export default function List() {
           <Edit
             cream={cream}
             action={async () => {
+              setLoading(true);
               setShowEditModal(false);
+              setCreams(await getCreams(1, creams.length));
+              setLoading(false);
             }}
           >
             <div className="d-flex justify-content-end">

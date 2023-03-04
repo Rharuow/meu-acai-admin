@@ -119,14 +119,16 @@ function ProductsPage() {
             </Accordion.Body>
           </Accordion.Item>
 
-          <Accordion.Item eventKey="4">
-            <Accordion.Header>
-              <span className="fw-bold text-primary">La carte</span>
-            </Accordion.Header>
-            <Accordion.Body className="bg-secondary px-1">
-              <ListMenu />
-            </Accordion.Body>
-          </Accordion.Item>
+          {sizes.length > 0 && creams.length > 0 && toppings.length > 0 && (
+            <Accordion.Item eventKey="4">
+              <Accordion.Header>
+                <span className="fw-bold text-primary">La carte</span>
+              </Accordion.Header>
+              <Accordion.Body className="bg-secondary px-1">
+                <ListMenu />
+              </Accordion.Body>
+            </Accordion.Item>
+          )}
         </Accordion>
       )}
     </ProductContext.Provider>

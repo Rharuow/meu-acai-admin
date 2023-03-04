@@ -65,8 +65,10 @@ export default function List() {
           <Edit
             size={size}
             action={async () => {
+              setLoading(true);
               setShowEditModal(false);
-              // await getSizes();
+              setSizes(await getSizes(1, sizes.length));
+              setLoading(false);
             }}
           >
             <div className="d-flex justify-content-end">

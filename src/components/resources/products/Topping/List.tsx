@@ -69,8 +69,10 @@ export default function List() {
           <Edit
             topping={topping}
             action={async () => {
+              setLoading(true);
               setShowEditModal(false);
-              productSetLoading(true);
+              setToppings(await getToppings(1, toppings.length));
+              setLoading(false);
             }}
           >
             <div className="d-flex justify-content-end">

@@ -16,7 +16,7 @@ import { db, sizeCollection } from "../firebase";
 
 let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
-const perPageDefault = 10;
+const perPageDefault = 5;
 
 export const createSize = async (data: Size) => {
   const sizeValidation = await sizeAlreadyExists({ name: data.name });
@@ -29,7 +29,7 @@ export const createSize = async (data: Size) => {
   }
 };
 
-export const listSize = async (
+export const getSizes = async (
   page: number = 1,
   perPage: number = perPageDefault
 ) => {
@@ -37,11 +37,11 @@ export const listSize = async (
     page > 1
       ? query(
           sizeCollection,
-          orderBy("name"),
+          orderBy("value"),
           startAfter(lastVisible),
           limit(perPage)
         )
-      : query(sizeCollection, orderBy("name"), limit(perPage));
+      : query(sizeCollection, orderBy("value"), limit(perPage));
   const sizes = (await getDocs(q)).docs;
 
   lastVisible = sizes[sizes.length - 1];
@@ -62,10 +62,15 @@ export const sizeAlreadyExists = async ({
   id?: string;
   name: string;
 }) => {
-  const sizes = await listSize();
+  const sizes = await getSizes();
 
   return !!sizes.find((size) => size.id === id || size.name === name);
 };
+
+export const getAllSizes = async () =>
+  (await getDocs(query(sizeCollection, orderBy("value")))).docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Size)
+  );
 
 export const deleteSize = async (id: string) =>
   await deleteDoc(doc(db, "sizes", id));

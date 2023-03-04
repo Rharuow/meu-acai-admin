@@ -16,7 +16,7 @@ import { db, toppingCollection } from "../firebase";
 
 let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
-const perPageDefault = 2;
+const perPageDefault = 5;
 
 export const createTopping = async (data: Topping) => {
   const toppingValidation = await toppingAlreadyExists({ name: data.name });
@@ -55,7 +55,7 @@ export const getToppings = async (
 };
 
 export const getAllTopping = async () =>
-  (await getDocs(toppingCollection)).docs.map(
+  (await getDocs(query(toppingCollection, orderBy("value")))).docs.map(
     (doc) => ({ ...doc.data(), id: doc.id } as Topping)
   );
 

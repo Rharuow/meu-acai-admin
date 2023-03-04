@@ -2,7 +2,7 @@
 import { Creams, Size, Toppings } from "@/src/entities/Product";
 import ReactLoadingComponent from "@/src/rharuow-admin/components/ReactLoading";
 import { getCreamTotalPage, listCreams } from "@/src/service/docs/creams";
-import { listSize, getSizeTotalPage } from "@/src/service/docs/sizes";
+import { getSizes, getSizeTotalPage } from "@/src/service/docs/sizes";
 import { getToppingTotalPage, getToppings } from "@/src/service/docs/toppings";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Accordion } from "react-bootstrap";
@@ -42,15 +42,12 @@ function ProductsPage() {
   const [loading, setLoading] = useState(true);
 
   const [sizes, setSizes] = useState<Array<Size>>([]);
-  const [sizesPage, setSizesPage] = useState<number>(1);
   const [sizesTotalPage, setSizesTotalPage] = useState<number>(1);
 
   const [toppings, setToppings] = useState<Toppings>([]);
-  const [toppingsPage, setToppingsPage] = useState<number>(1);
   const [toppingsTotalPage, setToppingsTotalPage] = useState<number>(1);
 
   const [creams, setCreams] = useState<Creams>([]);
-  const [creamsPage, setCreamsPage] = useState<number>(1);
   const [creamsTotalPage, setCreamsTotalPage] = useState<number>(1);
 
   const loadConditions = async () => {
@@ -60,10 +57,8 @@ function ProductsPage() {
     setCreams(await listCreams());
     setCreamsTotalPage(await getCreamTotalPage());
 
-    setSizes(await listSize());
+    setSizes(await getSizes());
     setSizesTotalPage(await getSizeTotalPage());
-
-    // TO-DO
 
     setLoading(false);
   };
@@ -98,24 +93,26 @@ function ProductsPage() {
       ) : (
         <Accordion>
           <Accordion.Item eventKey="1">
-            <Accordion.Header className="fw-bold text-primary">
-              Tamanhos
+            <Accordion.Header>
+              <span className="fw-bold text-primary">Tamanhos</span>
             </Accordion.Header>
             <Accordion.Body className="bg-secondary px-1">
               <ListSize />
             </Accordion.Body>
           </Accordion.Item>
+
           <Accordion.Item eventKey="2">
-            <Accordion.Header className="fw-bold text-primary">
-              Cremes
+            <Accordion.Header>
+              <span className="fw-bold text-primary">Cremes</span>
             </Accordion.Header>
             <Accordion.Body className="bg-secondary px-1">
               <ListCream />
             </Accordion.Body>
           </Accordion.Item>
+
           <Accordion.Item eventKey="3">
-            <Accordion.Header className="fw-bold text-primary">
-              Acompanhamentos
+            <Accordion.Header>
+              <span className="fw-bold text-primary">Acompanhamentos</span>
             </Accordion.Header>
             <Accordion.Body className="bg-secondary px-1">
               <ListTopping />
@@ -123,8 +120,8 @@ function ProductsPage() {
           </Accordion.Item>
 
           <Accordion.Item eventKey="4">
-            <Accordion.Header className="fw-bold text-primary">
-              La carte
+            <Accordion.Header>
+              <span className="fw-bold text-primary">La carte</span>
             </Accordion.Header>
             <Accordion.Body className="bg-secondary px-1">
               <ListMenu />

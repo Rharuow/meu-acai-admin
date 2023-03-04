@@ -1,6 +1,4 @@
-import { Size } from "@/src/entities/Product";
-import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { deleteSize, listSize } from "@/src/service/docs/sizes";
+import LottiePlayer from "lottie-react";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -10,31 +8,47 @@ import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
+import { Size } from "@/src/entities/Product";
+import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
+import {
+  deleteSize,
+  getAllSizes,
+  getSizes,
+  getSizeTotalPage,
+} from "@/src/service/docs/sizes";
+
+import finishedAnimation from "@/src/components/lottie/finished.json";
+
 export default function List() {
-  const { productSetLoading, sizes, sizesTotalPage, setSizes } =
-    useProductContext();
+  const {
+    productSetLoading,
+    sizes,
+    sizesTotalPage,
+    setSizes,
+    setSizesTotalPage,
+  } = useProductContext();
 
   const [loading, setLoading] = useState(true);
+  const [loadingSize, setLoadingSize] = useState(false);
   const [size, setSize] = useState<Size>();
   const [currentPage, setCurrentPage] = useState(1);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
 
-  const pages = Array.from({ length: sizesTotalPage }, (_, i) => i + 1);
+  const handlePagination = async () => {
+    setLoadingSize(true);
+    const newToppgings = await getSizes(currentPage + 1);
+    setSizes((prevState) => [...prevState, ...newToppgings]);
+    setCurrentPage(currentPage + 1);
+    setLoadingSize(false);
+  };
 
   const { isMobile } = useWindowSize();
 
   const handleDelete = (index: number) => {
     setSize(sizes[index]);
     setShowDeleteModal(true);
-  };
-
-  const handlePagination = async (e: any) => {
-    setLoading(true);
-    setSizes(await listSize(parseInt(e.target.innerHTML)));
-    setCurrentPage(parseInt(e.target.innerHTML));
-    setLoading(false);
   };
 
   const handleEdit = (index: number) => {
@@ -98,7 +112,10 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               size && (await deleteSize(size.id));
-              productSetLoading(true);
+              const allSizes = await getAllSizes();
+              sizes && setSizes(await getSizes(1, sizes.length));
+              setCurrentPage(allSizes.length);
+              setSizesTotalPage(allSizes.length);
               setLoading(false);
             }}
           >
@@ -115,7 +132,10 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              productSetLoading(true);
+              const sizesTotalPage = await getSizeTotalPage();
+              setSizes(await getAllSizes());
+              setSizesTotalPage(sizesTotalPage);
+              setCurrentPage(sizesTotalPage);
             }}
           >
             <div className="d-flex justify-content-end">
@@ -144,13 +164,13 @@ export default function List() {
               <Table responsive variant="secondary" striped>
                 <thead>
                   <tr>
-                    <th className=" text-center text-truncate">Nome</th>
-                    <th className=" text-center text-truncate">Valor</th>
-                    <th className="max-w-80px text-center text-truncate">
-                      Acompanhamentos
+                    <th className=" px-1 text-center text-truncate">Nome</th>
+                    <th className=" px-1 text-center text-truncate">Valor</th>
+                    <th className=" px-1 max-w-65px text-center text-truncate">
+                      Acompanhamento
                     </th>
-                    <th className="text-center text-truncate">Cremes</th>
-                    <th className="text-center text-truncate">Ações</th>
+                    <th className=" px-1 text-center text-truncate">Cremes</th>
+                    <th className=" px-1text-center text-truncate">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -214,26 +234,36 @@ export default function List() {
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td
+                      colSpan={5}
+                      className={sizesTotalPage >= currentPage ? " " : "p-0"}
+                    >
+                      {sizesTotalPage >= currentPage + 1 ? (
+                        <div className="d-flex justify-content-center">
+                          <Button
+                            className="success-outline"
+                            onClick={() => handlePagination()}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      ) : (
+                        <LottiePlayer
+                          animationData={finishedAnimation}
+                          className="h-80px"
+                        />
+                      )}
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
-              <div className="d-flex flex-wrap mt-3 justify-content-center">
-                {pages.length > 1 && (
-                  <Pagination>
-                    {pages.map((page) => (
-                      <Pagination.Item
-                        key={page}
-                        active={page === currentPage}
-                        onClick={(e) => handlePagination(e)}
-                      >
-                        {page}
-                      </Pagination.Item>
-                    ))}
-                  </Pagination>
-                )}
-                <div className="d-flex justify-content-center w-100">
-                  <Button onClick={() => setShowCreateModal(true)}>
-                    Add Tamanho
-                  </Button>
-                </div>
+
+              <div className="d-flex justify-content-center w-100 mt-3">
+                <Button onClick={() => setShowCreateModal(true)}>
+                  Add Acompanhamento
+                </Button>
               </div>
             </>
           ) : (

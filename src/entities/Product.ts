@@ -29,7 +29,7 @@ export type Size = {
 export type Menu = {
   id: string;
   name: string;
-  size: Size;
+  sizes: Size[];
   creams: Creams;
   visible: boolean;
   toppings?: Toppings;

@@ -1,5 +1,5 @@
-import { Topping } from "@/src/entities/Product";
-import { createTopping } from "@/src/service/docs/toppings";
+import { Menu } from "@/src/entities/Product";
+import { createMenu } from "@/src/service/docs/menus";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { FormProvider, useForm } from "react-hook-form";
@@ -13,27 +13,27 @@ export default function Create({
   children?: JSX.Element;
   action?: () => void;
 }) {
-  const methods = useForm<Topping>();
+  const methods = useForm<Menu>();
   const [validated, setValidated] = useState(false);
 
-  const onSubmit = async (data: Topping) => {
+  const onSubmit = async (data: Menu) => {
     setValidated(true);
 
-    const dataFormatted: Topping = {
+    const dataFormatted: Menu = {
       ...data,
       value: parseFloat(`${data.value}`),
     };
 
-    const toppingCreated = await createTopping(dataFormatted);
+    const menuCreated = await createMenu(dataFormatted);
     Swal.fire({
-      title: toppingCreated ? "Perfeito" : "Opss",
-      text: toppingCreated
-        ? "O acompanhamento foi criado com sucesso!"
-        : "Os acompanhamentos devem ter nomes diferentes...",
-      icon: toppingCreated ? "success" : "error",
+      title: menuCreated ? "Perfeito" : "Opss",
+      text: menuCreated
+        ? "O produto foi criado com sucesso!"
+        : "Os produtos devem ter nomes diferentes...",
+      icon: menuCreated ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {
-      toppingCreated && action && action();
+      menuCreated && action && action();
     });
   };
   return (

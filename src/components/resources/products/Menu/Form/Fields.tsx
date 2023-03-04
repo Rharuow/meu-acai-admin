@@ -1,11 +1,39 @@
-import { Menu } from "@/src/entities/Product";
+import { Menu, Size } from "@/src/entities/Product";
 import React from "react";
 import { Form } from "react-bootstrap";
 import CurrencyInput from "react-currency-input-field";
+import { AsyncPaginate, LoadOptions } from "react-select-async-paginate";
 import { useFormContext } from "react-hook-form";
+import {
+  getSizes,
+  getSizesByName,
+  getSizeTotalPage,
+} from "@/src/service/docs/sizes";
+import { GroupBase } from "react-select";
 
 function Fields({ menu }: { menu?: Menu }) {
   const { register, setValue } = useFormContext();
+
+  // LoadOptions<Size, GroupBase<Size>, { page: any; }>
+
+  const loadOptions = async (
+    search: string,
+    prevOptions: unknown,
+    { page }: { page: number }
+  ) => {
+    const sizes = !!search
+      ? await getSizesByName(search, page)
+      : await getSizes(page);
+    const sizeTotalPage = await getSizeTotalPage();
+
+    return {
+      options: sizes.map((size) => ({ value: size, label: size.name })),
+      hasMore: sizeTotalPage > page,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
 
   return (
     <>
@@ -20,7 +48,7 @@ function Fields({ menu }: { menu?: Menu }) {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formMenu">
-        <Form.Label className="fw-bold text-primary">Valor</Form.Label>
+        <Form.Label className="fw-bold text-primary">Preço</Form.Label>
         <CurrencyInput
           required
           {...register("value")}
@@ -36,12 +64,15 @@ function Fields({ menu }: { menu?: Menu }) {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formMenu">
-        <Form.Label className="fw-bold text-primary">Preço</Form.Label>
-        <Form.Select aria-label="Default select example">
-          <option value="1">One</option>
-          <option value="2">Two</option>
-          <option value="3">Three</option>
-        </Form.Select>
+        <Form.Label className="fw-bold text-primary">Tamanhos</Form.Label>
+        <AsyncPaginate
+          isMulti
+          additional={{
+            page: 1,
+          }}
+          // @ts-expect-error
+          loadOptions={loadOptions}
+        />
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formMenu">

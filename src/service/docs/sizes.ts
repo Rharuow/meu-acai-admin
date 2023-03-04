@@ -55,6 +55,39 @@ export const getSizes = async (
   );
 };
 
+export const getSizesByName = async (
+  name: string,
+  page: number = 1,
+  perPage: number = perPageDefault
+) => {
+  const q =
+    page > 1
+      ? query(
+          sizeCollection,
+          orderBy("value"),
+          startAfter(lastVisible),
+          limit(perPage)
+        )
+      : query(sizeCollection, orderBy("value"), limit(perPage));
+  const sizes = (await getDocs(q)).docs;
+
+  lastVisible = sizes[sizes.length - 1];
+
+  const sizesFiltered = sizes.filter((s) => {
+    console.log("s.data().name = ", s.data().name);
+    console.log("name = ", name);
+    return s.data().name.includes(name);
+  });
+
+  return sizesFiltered.map(
+    (doc) =>
+      ({
+        ...(doc.data() as Size),
+        id: doc.id,
+      } as Size)
+  );
+};
+
 export const sizeAlreadyExists = async ({
   id,
   name,

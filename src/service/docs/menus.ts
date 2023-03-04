@@ -1,6 +1,22 @@
 import { Menu } from "@/src/entities/Product";
-import { addDoc, deleteDoc, doc, getDocs, updateDoc } from "firebase/firestore";
+import {
+  addDoc,
+  deleteDoc,
+  doc,
+  DocumentData,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  QueryDocumentSnapshot,
+  startAfter,
+  updateDoc,
+} from "firebase/firestore";
 import { db, menuCollection } from "../firebase";
+
+let lastVisible: QueryDocumentSnapshot<DocumentData>;
+
+const perPageDefault = 2;
 
 export const createMenu = async (data: Menu) => {
   const menuValidation = await menuAlreadyExists({ name: data.name });
@@ -12,13 +28,36 @@ export const createMenu = async (data: Menu) => {
     return false;
   }
 };
-export const listMenu = async () =>
-  (await getDocs(menuCollection)).docs.map(
+
+export const getMenus = async (
+  page: number = 1,
+  perPage: number = perPageDefault
+) => {
+  const q =
+    page > 1
+      ? query(
+          menuCollection,
+          orderBy("name"),
+          startAfter(lastVisible),
+          limit(perPage)
+        )
+      : query(menuCollection, orderBy("name"), limit(perPage));
+  const menus = (await getDocs(q)).docs;
+
+  lastVisible = menus[menus.length - 1];
+
+  return menus.map(
     (doc) =>
       ({
         ...(doc.data() as Menu),
         id: doc.id,
       } as Menu)
+  );
+};
+
+export const getAllMenus = async () =>
+  (await getDocs(query(menuCollection, orderBy("name")))).docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Menu)
   );
 
 export const menuAlreadyExists = async ({
@@ -28,7 +67,7 @@ export const menuAlreadyExists = async ({
   id?: string;
   name: string;
 }) => {
-  const menus = await listMenu();
+  const menus = await getMenus();
 
   return !!menus.find((menu) => menu.id === id || menu.name === name);
 };
@@ -45,3 +84,11 @@ export const updateMenu = async (id: string, data: any) => {
     return false;
   }
 };
+
+// Paginable's functions
+
+export const amountMenu = async () =>
+  (await getDocs(menuCollection)).docs.length;
+
+export const getMenuTotalPage = async () =>
+  Math.ceil((await amountMenu()) / perPageDefault);

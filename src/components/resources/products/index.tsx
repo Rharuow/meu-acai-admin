@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Creams, Size, Toppings } from "@/src/entities/Product";
+import { Creams, Menu, Size, Toppings } from "@/src/entities/Product";
 import ReactLoadingComponent from "@/src/rharuow-admin/components/ReactLoading";
 import { getCreamTotalPage, getCreams } from "@/src/service/docs/creams";
+import { getMenus, getMenuTotalPage } from "@/src/service/docs/menus";
 import { getSizes, getSizeTotalPage } from "@/src/service/docs/sizes";
 import { getToppingTotalPage, getToppings } from "@/src/service/docs/toppings";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -33,6 +34,12 @@ const ProductContext = createContext(
 
     sizes: Array<Size>;
     setSizes: React.Dispatch<React.SetStateAction<Array<Size>>>;
+
+    menusTotalPage: number;
+    setMenusTotalPage: React.Dispatch<React.SetStateAction<number>>;
+
+    menus: Array<Menu>;
+    setMenus: React.Dispatch<React.SetStateAction<Array<Menu>>>;
   }
 );
 
@@ -50,6 +57,9 @@ function ProductsPage() {
   const [creams, setCreams] = useState<Creams>([]);
   const [creamsTotalPage, setCreamsTotalPage] = useState<number>(1);
 
+  const [menus, setMenus] = useState<Array<Menu>>([]);
+  const [menusTotalPage, setMenusTotalPage] = useState<number>(1);
+
   const loadConditions = async () => {
     setToppings(await getToppings());
     setToppingsTotalPage(await getToppingTotalPage());
@@ -59,6 +69,12 @@ function ProductsPage() {
 
     setSizes(await getSizes());
     setSizesTotalPage(await getSizeTotalPage());
+
+    sizes.length > 0 &&
+      creams.length > 0 &&
+      toppings.length > 0 &&
+      setMenus(await getMenus());
+    setMenusTotalPage(await getMenuTotalPage());
 
     setLoading(false);
   };
@@ -70,6 +86,10 @@ function ProductsPage() {
   return (
     <ProductContext.Provider
       value={{
+        menus,
+        menusTotalPage,
+        setMenus,
+        setMenusTotalPage,
         creamsTotalPage,
         setCreamsTotalPage,
         setToppingsTotalPage,

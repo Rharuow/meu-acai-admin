@@ -1,21 +1,26 @@
 import { Menu } from "@/src/entities/Product";
 import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { deleteMenu, listMenu } from "@/src/service/docs/menus";
+import { deleteMenu, getMenus } from "@/src/service/docs/menus";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
+import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
 
 export default function List() {
+  const { menus, menusTotalPage, setMenus, setMenusTotalPage } =
+    useProductContext();
+
   const [loading, setLoading] = useState(true);
-  const [menus, setMenus] = useState<Array<Menu>>([]);
+  const [loadingMenu, setLoadingMenu] = useState(false);
   const [menu, setMenu] = useState<Menu>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { isMobile } = useWindowSize();
 
@@ -24,26 +29,28 @@ export default function List() {
     setShowDeleteModal(true);
   };
 
+  const handlePagination = async () => {
+    setLoadingMenu(true);
+    const newToppgings = await getMenus(currentPage + 1);
+    setMenus((prevState) => [...prevState, ...newToppgings]);
+    setCurrentPage(currentPage + 1);
+    setLoadingMenu(false);
+  };
+
   const handleEdit = (index: number) => {
     setMenu(menus[index]);
     setShowEditModal(true);
   };
 
-  const getMenus = async () => {
-    const menusRecovery = await listMenu();
-    setMenus(menusRecovery);
-    setLoading(false);
-  };
-
   useEffect(() => {
-    getMenus();
+    setLoading(false);
   }, []);
 
   return (
     <>
       <Modal centered show={showEditModal}>
         <Modal.Header onHide={() => setShowEditModal(false)}>
-          <Modal.Title>Editar Acompanhamento</Modal.Title>
+          <Modal.Title>Editar Produto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Edit
@@ -70,7 +77,7 @@ export default function List() {
 
       <Modal centered show={showDeleteModal}>
         <Modal.Header onHide={() => setShowDeleteModal(false)}>
-          <Modal.Title>Apagar Acompanhamento</Modal.Title>
+          <Modal.Title>Apagar Produto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
@@ -102,7 +109,7 @@ export default function List() {
 
       <Modal centered show={showCreateModal}>
         <Modal.Header onHide={() => setShowCreateModal(false)}>
-          <Modal.Title>Criando Acompanhamento</Modal.Title>
+          <Modal.Title>Criando Produto</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Create

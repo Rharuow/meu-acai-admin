@@ -1,25 +1,34 @@
-import { Cream } from "@/src/entities/Product";
-import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { deleteCream, listCreams } from "@/src/service/docs/creams";
+import LottiePlayer from "lottie-react";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Button, ButtonGroup, Modal, Pagination, Table } from "react-bootstrap";
+import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
+
 import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
+import { Cream } from "@/src/entities/Product";
+import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
+import {
+  deleteCream,
+  getAllCreams,
+  getCreams,
+  getCreamTotalPage,
+} from "@/src/service/docs/creams";
+import finishedAnimation from "@/src/components/lottie/finished.json";
 
 export default function List() {
-  const { productSetLoading, creams, creamsTotalPage, setCreams } =
+  const { creams, creamsTotalPage, setCreams, setCreamsTotalPage } =
     useProductContext();
-  const pages = Array.from({ length: creamsTotalPage }, (_, i) => i + 1);
+
   const [loading, setLoading] = useState(true);
+  const [loadingCreams, setLoadingCreams] = useState(false);
   const [cream, setCream] = useState<Cream>();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState(pages[pages.length - 1]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const { isMobile } = useWindowSize();
 
@@ -28,11 +37,12 @@ export default function List() {
     setShowDeleteModal(true);
   };
 
-  const handlePagination = async (e: any) => {
-    setLoading(true);
-    setCreams(await listCreams(parseInt(e.target.innerHTML)));
-    setCurrentPage(pages[pages.length - 1]);
-    setLoading(false);
+  const handlePagination = async () => {
+    setLoadingCreams(true);
+    const newToppgings = await getCreams(currentPage + 1);
+    setCreams((prevState) => [...prevState, ...newToppgings]);
+    setCurrentPage(currentPage + 1);
+    setLoadingCreams(false);
   };
 
   const handleEdit = (index: number) => {
@@ -95,7 +105,10 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               cream && (await deleteCream(cream.id));
-              productSetLoading(true);
+              const allCreams = await getAllCreams();
+              creams && setCreams(await getCreams(1, creams.length));
+              setCurrentPage(allCreams.length);
+              setCreamsTotalPage(allCreams.length);
               setLoading(false);
             }}
           >
@@ -112,7 +125,10 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              productSetLoading(true);
+              const creamsTotalPage = await getCreamTotalPage();
+              setCreams(await getAllCreams());
+              setCreamsTotalPage(creamsTotalPage);
+              setCurrentPage(creamsTotalPage);
             }}
           >
             <div className="d-flex justify-content-end">
@@ -138,7 +154,7 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {creams.length > 0 ? (
             <>
-              <Table responsive variant="secondary" striped>
+              <Table variant="secondary" className="w-100" striped>
                 <thead>
                   <tr>
                     <th className=" text-center text-truncate">Nome</th>
@@ -197,27 +213,49 @@ export default function List() {
                       </td>
                     </tr>
                   ))}
+                  {loadingCreams && (
+                    <tr>
+                      <td colSpan={3}>
+                        <div className="d-flex justify-content-center">
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#46295a"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td
+                      colSpan={3}
+                      className={creamsTotalPage >= currentPage ? " " : "p-0"}
+                    >
+                      {creamsTotalPage >= currentPage + 1 ? (
+                        <div className="d-flex justify-content-center">
+                          <Button
+                            className="success-outline"
+                            onClick={() => handlePagination()}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      ) : (
+                        <LottiePlayer
+                          animationData={finishedAnimation}
+                          className="h-80px"
+                        />
+                      )}
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
-              <div className="d-flex flex-wrap mt-3 justify-content-center">
-                {pages.length > 1 && (
-                  <Pagination>
-                    {pages.map((page) => (
-                      <Pagination.Item
-                        key={page}
-                        active={page === currentPage}
-                        onClick={(e) => handlePagination(e)}
-                      >
-                        {page}
-                      </Pagination.Item>
-                    ))}
-                  </Pagination>
-                )}
-                <div className="d-flex justify-content-center w-100">
-                  <Button onClick={() => setShowCreateModal(true)}>
-                    Add Creme
-                  </Button>
-                </div>
+
+              <div className="d-flex justify-content-center w-100">
+                <Button onClick={() => setShowCreateModal(true)}>
+                  Add Creme
+                </Button>
               </div>
             </>
           ) : (

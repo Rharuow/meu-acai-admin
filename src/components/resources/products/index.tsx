@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Creams, Size, Toppings } from "@/src/entities/Product";
 import ReactLoadingComponent from "@/src/rharuow-admin/components/ReactLoading";
-import { getCreamTotalPage, listCreams } from "@/src/service/docs/creams";
+import { getCreamTotalPage, getCreams } from "@/src/service/docs/creams";
 import { getSizes, getSizeTotalPage } from "@/src/service/docs/sizes";
 import { getToppingTotalPage, getToppings } from "@/src/service/docs/toppings";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -54,7 +54,7 @@ function ProductsPage() {
     setToppings(await getToppings());
     setToppingsTotalPage(await getToppingTotalPage());
 
-    setCreams(await listCreams());
+    setCreams(await getCreams());
     setCreamsTotalPage(await getCreamTotalPage());
 
     setSizes(await getSizes());

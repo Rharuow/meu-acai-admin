@@ -54,7 +54,7 @@ export const getToppings = async (
   );
 };
 
-export const getAllTopping = async () =>
+export const getAllToppings = async () =>
   (await getDocs(query(toppingCollection, orderBy("value")))).docs.map(
     (doc) => ({ ...doc.data(), id: doc.id } as Topping)
   );

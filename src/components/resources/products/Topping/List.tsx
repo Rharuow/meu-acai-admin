@@ -14,7 +14,7 @@ import {
   deleteTopping,
   getToppingTotalPage,
   getToppings,
-  getAllTopping,
+  getAllToppings,
 } from "@/src/service/docs/toppings";
 import finishedAnimation from "@/src/components/lottie/finished.json";
 
@@ -58,8 +58,6 @@ export default function List() {
   useEffect(() => {
     setLoading(false);
   }, []);
-
-  console.log("toppings = ", toppings);
 
   return (
     <>
@@ -113,7 +111,7 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               topping && (await deleteTopping(topping.id));
-              const allToppings = await getAllTopping();
+              const allToppings = await getAllToppings();
               toppings && setToppings(await getToppings(1, toppings.length));
               setCurrentPage(allToppings.length);
               setToppingsTotalPage(allToppings.length);
@@ -134,7 +132,7 @@ export default function List() {
             action={async () => {
               setShowCreateModal(false);
               const toppingsTotalPage = await getToppingTotalPage();
-              setToppings(await getAllTopping());
+              setToppings(await getAllToppings());
               setToppingsTotalPage(toppingsTotalPage);
               setCurrentPage(toppingsTotalPage);
             }}
@@ -162,7 +160,7 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {toppings.length > 0 ? (
             <>
-              <Table responsive variant="secondary" striped>
+              <Table className="w-100" variant="secondary" striped>
                 <thead>
                   <tr>
                     <th className=" text-center text-truncate">Nome</th>

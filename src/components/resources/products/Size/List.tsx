@@ -20,13 +20,8 @@ import {
 import finishedAnimation from "@/src/components/lottie/finished.json";
 
 export default function List() {
-  const {
-    productSetLoading,
-    sizes,
-    sizesTotalPage,
-    setSizes,
-    setSizesTotalPage,
-  } = useProductContext();
+  const { sizes, sizesTotalPage, setSizes, setSizesTotalPage } =
+    useProductContext();
 
   const [loading, setLoading] = useState(true);
   const [loadingSize, setLoadingSize] = useState(false);
@@ -161,7 +156,7 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {sizes.length > 0 ? (
             <>
-              <Table responsive variant="secondary" striped>
+              <Table className="w-100" variant="secondary" striped>
                 <thead>
                   <tr>
                     <th className=" px-1 text-center text-truncate">Nome</th>
@@ -233,6 +228,18 @@ export default function List() {
                       </td>
                     </tr>
                   ))}
+                  {loadingSize && (
+                    <tr>
+                      <td colSpan={4}>
+                        <div className="d-flex justify-content-center">
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#46295a"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
                 <tfoot>
                   <tr>

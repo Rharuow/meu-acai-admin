@@ -16,7 +16,7 @@ import { db, creamCollection } from "../firebase";
 
 let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
-const perPageDefault = 10;
+const perPageDefault = 2;
 
 export const createCream = async (data: Cream) => {
   const creamValidation = await creamAlreadyExists({ name: data.name });
@@ -28,7 +28,8 @@ export const createCream = async (data: Cream) => {
     return false;
   }
 };
-export const listCreams = async (
+
+export const getCreams = async (
   page: number = 1,
   perPage: number = perPageDefault
 ) => {
@@ -54,6 +55,11 @@ export const listCreams = async (
   );
 };
 
+export const getAllCreams = async () =>
+  (await getDocs(query(creamCollection, orderBy("name")))).docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Cream)
+  );
+
 export const creamAlreadyExists = async ({
   id,
   name,
@@ -61,7 +67,7 @@ export const creamAlreadyExists = async ({
   id?: string;
   name: string;
 }) => {
-  const creams = await listCreams();
+  const creams = await getCreams();
 
   return !!creams.find((cream) => cream.id === id || cream.name === name);
 };

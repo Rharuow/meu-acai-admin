@@ -28,7 +28,7 @@ function Fields({ topping }: { topping?: Topping }) {
           prefix="R$"
           decimalsLimit={2}
           onValueChange={(value, name = "value") => {
-            setValue(name, parseFloat(`${value?.replace(/,/g, ".")}`));
+            setValue(name, value);
           }}
           {...(topping?.value && { defaultValue: topping.value })}
         />

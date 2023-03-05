@@ -21,7 +21,7 @@ export default function Create({
 
     const dataFormatted: Topping = {
       ...data,
-      value: parseFloat(`${data.value}`),
+      value: parseFloat(`${data.value}`.replace(/,/g, ".")),
     };
 
     const toppingCreated = await createTopping(dataFormatted);

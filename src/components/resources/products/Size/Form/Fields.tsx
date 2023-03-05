@@ -28,7 +28,7 @@ function Fields({ size }: { size?: Size }) {
           prefix="R$"
           decimalsLimit={2}
           onValueChange={(value, name = "value") => {
-            setValue(name, value);
+            setValue(name, parseFloat(`${value?.replace(/,/g, ".")}`));
           }}
           {...(size?.value && { defaultValue: size.value })}
         />

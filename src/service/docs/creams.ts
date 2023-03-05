@@ -16,7 +16,7 @@ import { db, creamCollection } from "../firebase";
 
 let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
-const perPageDefault = 2;
+const perPageDefault = 5;
 
 export const createCream = async (data: Cream) => {
   const creamValidation = await creamAlreadyExists({ name: data.name });

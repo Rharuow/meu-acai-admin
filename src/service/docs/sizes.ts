@@ -16,7 +16,7 @@ import { db, sizeCollection } from "../firebase";
 
 let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
-const perPageDefault = 5;
+const perPageDefault = 2;
 
 export const createSize = async (data: Size) => {
   const sizeValidation = await sizeAlreadyExists({ name: data.name });

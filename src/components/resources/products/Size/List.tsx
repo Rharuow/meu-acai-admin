@@ -110,9 +110,12 @@ export default function List() {
               setShowDeleteModal(false);
               size && (await deleteSize(size.id));
               const allSizes = await getAllSizes();
-              sizes && setSizes(await getSizes(1, sizes.length));
-              setCurrentPage(allSizes.length);
-              setSizesTotalPage(allSizes.length);
+              const newSizes = await getSizes(1, sizes.length);
+              const totalPages = Math.ceil(allSizes.length / 2);
+              setSizes(newSizes);
+              setSizesTotalPage(totalPages);
+              currentPage > totalPages &&
+                setCurrentPage((prevState) => prevState - 1);
               setLoading(false);
             }}
           >
@@ -232,7 +235,7 @@ export default function List() {
                   ))}
                   {loadingSize && (
                     <tr>
-                      <td colSpan={4}>
+                      <td colSpan={5}>
                         <div className="d-flex justify-content-center">
                           <ReactLoading
                             type="spinningBubbles"
@@ -277,7 +280,11 @@ export default function List() {
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">
-              <p className="fw-bold mb-0">Nenhum tamanho cadastrado</p>
+              <div className="w-100">
+                <p className="text-center fw-bold mb-0">
+                  Nenhum tamanho cadastrado
+                </p>
+              </div>
               <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
                 Criar Tamanho
               </Button>

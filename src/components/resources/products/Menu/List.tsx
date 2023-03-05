@@ -1,6 +1,11 @@
 import { Menu } from "@/src/entities/Product";
 import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
-import { deleteMenu, getMenus } from "@/src/service/docs/menus";
+import {
+  deleteMenu,
+  getAllMenus,
+  getMenus,
+  getMenuTotalPage,
+} from "@/src/service/docs/menus";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
@@ -115,7 +120,10 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              await getMenus();
+              const creamsTotalPage = await getMenuTotalPage();
+              setMenus(await getAllMenus());
+              setMenusTotalPage(creamsTotalPage);
+              setCurrentPage(creamsTotalPage);
             }}
           >
             <div className="d-flex justify-content-end">

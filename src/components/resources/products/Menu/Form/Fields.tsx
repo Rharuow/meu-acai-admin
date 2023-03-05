@@ -9,14 +9,32 @@ import {
   getSizesByName,
   getSizeTotalPage,
 } from "@/src/service/docs/sizes";
-import { GroupBase } from "react-select";
 
 function Fields({ menu }: { menu?: Menu }) {
   const { register, setValue } = useFormContext();
 
   // LoadOptions<Size, GroupBase<Size>, { page: any; }>
 
-  const loadOptions = async (
+  const loadSizes = async (
+    search: string,
+    prevOptions: unknown,
+    { page }: { page: number }
+  ) => {
+    const sizes = !!search
+      ? await getSizesByName(search, page)
+      : await getSizes(page);
+    const sizeTotalPage = await getSizeTotalPage();
+
+    return {
+      options: sizes.map((size) => ({ value: size, label: size.name })),
+      hasMore: sizeTotalPage > page,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+
+  const loadCreams = async (
     search: string,
     prevOptions: unknown,
     { page }: { page: number }
@@ -71,7 +89,19 @@ function Fields({ menu }: { menu?: Menu }) {
             page: 1,
           }}
           // @ts-expect-error
-          loadOptions={loadOptions}
+          loadOptions={loadSizes}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="formMenu">
+        <Form.Label className="fw-bold text-primary">Cremes</Form.Label>
+        <AsyncPaginate
+          isMulti
+          additional={{
+            page: 1,
+          }}
+          // @ts-expect-error
+          loadOptions={loadCreams}
         />
       </Form.Group>
 

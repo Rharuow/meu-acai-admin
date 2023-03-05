@@ -109,9 +109,9 @@ export default function List() {
               setShowDeleteModal(false);
               cream && (await deleteCream(cream.id));
               const allCreams = await getAllCreams();
-              creams && setCreams(await getCreams(1, creams.length));
-              setCurrentPage(allCreams.length);
-              setCreamsTotalPage(allCreams.length);
+              setCreams(allCreams);
+              setCurrentPage(1);
+              setCreamsTotalPage(Math.ceil(allCreams.length / 5));
               setLoading(false);
             }}
           >
@@ -263,7 +263,11 @@ export default function List() {
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">
-              <p className="fw-bold mb-0">Nenhum creme cadastrado</p>
+              <div className="w-100">
+                <p className="fw-bold mb-0 text-center">
+                  Nenhum creme cadastrado
+                </p>
+              </div>
               <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
                 Criar Creme
               </Button>

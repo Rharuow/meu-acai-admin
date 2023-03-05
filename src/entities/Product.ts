@@ -12,6 +12,7 @@ export type Toppings = Array<Topping>;
 export type Cream = {
   id: string;
   name: string;
+  visible: boolean;
   amount: number;
   unit: string;
 };
@@ -22,6 +23,7 @@ export type Size = {
   id: string;
   name: string;
   value: number;
+  visible: boolean;
   amountCreams: number;
   amountOptions: number;
 };

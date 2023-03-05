@@ -21,7 +21,7 @@ export default function Create({
 
     const dataFormatted: Menu = {
       ...data,
-      value: parseFloat(`${data.value}`),
+      value: parseFloat(`${data.value}`.replace(/,/g, ".")),
     };
 
     const menuCreated = await createMenu(dataFormatted);

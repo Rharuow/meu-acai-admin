@@ -16,7 +16,7 @@ import { db, menuCollection } from "../firebase";
 
 let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
-const perPageDefault = 2;
+const perPageDefault = 5;
 
 export const createMenu = async (data: Menu) => {
   const menuValidation = await menuAlreadyExists({ name: data.name });
@@ -42,11 +42,39 @@ export const getMenus = async (
           limit(perPage)
         )
       : query(menuCollection, orderBy("name"), limit(perPage));
+
+  const menus = await getDocs(q);
+  lastVisible = menus.docs[menus.docs.length - 1];
+  return menus.docs.map(
+    (doc) =>
+      ({
+        ...(doc.data() as Menu),
+        id: doc.id,
+      } as Menu)
+  );
+};
+
+export const getMenusByName = async (
+  name: string,
+  page: number = 1,
+  perPage: number = perPageDefault
+) => {
+  const q =
+    page > 1
+      ? query(
+          menuCollection,
+          orderBy("value"),
+          startAfter(lastVisible),
+          limit(perPage)
+        )
+      : query(menuCollection, orderBy("value"), limit(perPage));
   const menus = (await getDocs(q)).docs;
 
   lastVisible = menus[menus.length - 1];
 
-  return menus.map(
+  const menusFiltered = menus.filter((s) => s.data().name.includes(name));
+
+  return menusFiltered.map(
     (doc) =>
       ({
         ...(doc.data() as Menu),
@@ -56,7 +84,7 @@ export const getMenus = async (
 };
 
 export const getAllMenus = async () =>
-  (await getDocs(query(menuCollection, orderBy("name")))).docs.map(
+  (await getDocs(query(menuCollection, orderBy("value")))).docs.map(
     (doc) => ({ ...doc.data(), id: doc.id } as Menu)
   );
 

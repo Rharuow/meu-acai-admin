@@ -1,5 +1,5 @@
 import { Menu } from "@/src/entities/Product";
-import React from "react";
+import React, { useState } from "react";
 import { Form } from "react-bootstrap";
 import CurrencyInput from "react-currency-input-field";
 import { AsyncPaginate } from "react-select-async-paginate";
@@ -21,7 +21,9 @@ import {
 } from "@/src/service/docs/toppings";
 
 function Fields({ menu }: { menu?: Menu }) {
-  const { register, setValue } = useFormContext();
+  const { register, setValue, getValues } = useFormContext();
+
+  const [loadingCreams, setLoadingCreams] = useState(0);
 
   const loadSizes = async (
     search: string,
@@ -52,8 +54,12 @@ function Fields({ menu }: { menu?: Menu }) {
       : await getCreams(page);
     const creamTotalPage = await getCreamTotalPage();
 
+    const options = creams.filter((cream) =>
+      menu?.creams.every((c) => c.name !== cream.name)
+    );
+
     return {
-      options: creams.map((cream) => ({ value: cream, label: cream.name })),
+      options: options.map((cream) => ({ value: cream, label: cream.name })),
       hasMore: creamTotalPage > page,
       additional: {
         page: page + 1,
@@ -71,8 +77,13 @@ function Fields({ menu }: { menu?: Menu }) {
       : await getToppings(page);
     const toppingTotalPage = await getToppingTotalPage();
 
+    const options = toppings.filter(
+      (topping) =>
+        menu?.toppings && menu?.toppings.every((t) => t.name !== topping.name)
+    );
+
     return {
-      options: toppings.map((topping) => ({
+      options: options.map((topping) => ({
         value: topping,
         label: topping.name,
       })),
@@ -112,10 +123,16 @@ function Fields({ menu }: { menu?: Menu }) {
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="sizes">
-        <Form.Label className="fw-bold text-primary">Tamanhos</Form.Label>
+        <Form.Label className="fw-bold text-primary">Tamanho</Form.Label>
         <AsyncPaginate
-          {...register("sizes")}
-          isMulti
+          required
+          {...register("size")}
+          onChange={(e) => {
+            setValue("size", e?.value);
+          }}
+          {...(menu?.size && {
+            defaultValue: { value: menu.size, label: menu.size.name },
+          })}
           additional={{
             page: 1,
           }}
@@ -127,8 +144,23 @@ function Fields({ menu }: { menu?: Menu }) {
       <Form.Group className="mb-3" controlId="creams">
         <Form.Label className="fw-bold text-primary">Cremes</Form.Label>
         <AsyncPaginate
+          key={loadingCreams}
           {...register("creams")}
           isMulti
+          required
+          loadOptionsOnMenuOpen
+          onChange={(e) => {
+            setValue(
+              "creams",
+              e.map(({ value }) => value)
+            );
+          }}
+          {...(menu?.creams && {
+            defaultValue: menu.creams.map((cream) => ({
+              value: cream,
+              label: cream.name,
+            })),
+          })}
           additional={{
             page: 1,
           }}
@@ -144,9 +176,22 @@ function Fields({ menu }: { menu?: Menu }) {
         <AsyncPaginate
           {...register("toppings")}
           isMulti
+          onChange={(e) => {
+            setValue(
+              "toppings",
+              e.map(({ value }) => value)
+            );
+          }}
+          {...(menu?.toppings && {
+            defaultValue: menu.toppings.map((topping) => ({
+              value: topping,
+              label: topping.name,
+            })),
+          })}
           additional={{
             page: 1,
           }}
+          required
           // @ts-expect-error
           loadOptions={loadToppings}
         />

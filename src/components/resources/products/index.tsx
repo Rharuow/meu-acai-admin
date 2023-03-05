@@ -61,18 +61,21 @@ function ProductsPage() {
   const [menusTotalPage, setMenusTotalPage] = useState<number>(1);
 
   const loadConditions = async () => {
-    setToppings(await getToppings());
+    const initialToppings = await getToppings();
+    setToppings(initialToppings);
     setToppingsTotalPage(await getToppingTotalPage());
 
-    setCreams(await getCreams());
+    const initialCreams = await getCreams();
+    setCreams(initialCreams);
     setCreamsTotalPage(await getCreamTotalPage());
 
-    setSizes(await getSizes());
+    const initialSizes = await getSizes();
+    setSizes(initialSizes);
     setSizesTotalPage(await getSizeTotalPage());
 
-    sizes.length > 0 &&
-      creams.length > 0 &&
-      toppings.length > 0 &&
+    initialToppings.length > 0 &&
+      initialCreams.length > 0 &&
+      initialSizes.length > 0 &&
       setMenus(await getMenus());
     setMenusTotalPage(await getMenuTotalPage());
 
@@ -142,7 +145,7 @@ function ProductsPage() {
           {sizes.length > 0 && creams.length > 0 && toppings.length > 0 && (
             <Accordion.Item eventKey="4">
               <Accordion.Header>
-                <span className="fw-bold text-primary">La carte</span>
+                <span className="fw-bold text-primary">Cardápio</span>
               </Accordion.Header>
               <Accordion.Body className="bg-secondary px-1">
                 <ListMenu />

@@ -31,7 +31,7 @@ export type Size = {
 export type Menu = {
   id: string;
   name: string;
-  sizes: Size[];
+  size: Size;
   creams: Creams;
   visible: boolean;
   toppings?: Toppings;

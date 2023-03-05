@@ -279,7 +279,11 @@ export default function List() {
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">
-              <p className="fw-bold mb-0">Nenhum acompanhamento cadastrado</p>
+              <div className="w-100">
+                <p className="fw-bold mb-0 text-center">
+                  Nenhum acompanhamento cadastrado
+                </p>
+              </div>
               <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
                 Criar Acompanhamento
               </Button>

@@ -44,7 +44,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-100vh d-flex justify-content-center align-items-center">
+    <div className="min-h-100vh d-flex justify-content-center">
       <div className="d-flex flex-wrap px-3">
         <div className="d-flex justify-content-center w-100">
           <Image

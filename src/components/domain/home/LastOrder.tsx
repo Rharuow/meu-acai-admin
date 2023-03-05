@@ -1,10 +1,6 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 
-import { mockedOrders } from "@/src/entities/Order";
-
-import { useStoreContext } from "@/src/context/store";
-
 function LastOrder() {
   return (
     <Card bg="primary" className="w-100">

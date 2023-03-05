@@ -54,6 +54,35 @@ export const getToppings = async (
   );
 };
 
+export const getToppingsByName = async (
+  name: string,
+  page: number = 1,
+  perPage: number = perPageDefault
+) => {
+  const q =
+    page > 1
+      ? query(
+          toppingCollection,
+          orderBy("value"),
+          startAfter(lastVisible),
+          limit(perPage)
+        )
+      : query(toppingCollection, orderBy("value"), limit(perPage));
+  const toppings = (await getDocs(q)).docs;
+
+  lastVisible = toppings[toppings.length - 1];
+
+  const toppingsFiltered = toppings.filter((s) => s.data().name.includes(name));
+
+  return toppingsFiltered.map(
+    (doc) =>
+      ({
+        ...(doc.data() as Topping),
+        id: doc.id,
+      } as Topping)
+  );
+};
+
 export const getAllToppings = async () =>
   (await getDocs(query(toppingCollection, orderBy("value")))).docs.map(
     (doc) => ({ ...doc.data(), id: doc.id } as Topping)

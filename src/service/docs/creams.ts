@@ -55,6 +55,35 @@ export const getCreams = async (
   );
 };
 
+export const getCreamsByName = async (
+  name: string,
+  page: number = 1,
+  perPage: number = perPageDefault
+) => {
+  const q =
+    page > 1
+      ? query(
+          creamCollection,
+          orderBy("name"),
+          startAfter(lastVisible),
+          limit(perPage)
+        )
+      : query(creamCollection, orderBy("name"), limit(perPage));
+  const creams = (await getDocs(q)).docs;
+
+  lastVisible = creams[creams.length - 1];
+
+  const creamsFiltered = creams.filter((s) => s.data().name.includes(name));
+
+  return creamsFiltered.map(
+    (doc) =>
+      ({
+        ...(doc.data() as Cream),
+        id: doc.id,
+      } as Cream)
+  );
+};
+
 export const getAllCreams = async () =>
   (await getDocs(query(creamCollection, orderBy("name")))).docs.map(
     (doc) => ({ ...doc.data(), id: doc.id } as Cream)

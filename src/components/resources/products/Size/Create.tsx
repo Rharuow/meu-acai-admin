@@ -19,7 +19,10 @@ export default function Create({
   const onSubmit = async (data: Size) => {
     setValidated(true);
 
-    const dataFormatted: Size = { ...data, value: parseFloat(`${data.value}`) };
+    const dataFormatted: Size = {
+      ...data,
+      value: parseFloat(`${data.value}`.replace(/,/g, ".")),
+    };
 
     const sizeCreated = await createSize(dataFormatted);
     Swal.fire({

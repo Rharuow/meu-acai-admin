@@ -73,11 +73,7 @@ export const getSizesByName = async (
 
   lastVisible = sizes[sizes.length - 1];
 
-  const sizesFiltered = sizes.filter((s) => {
-    console.log("s.data().name = ", s.data().name);
-    console.log("name = ", name);
-    return s.data().name.includes(name);
-  });
+  const sizesFiltered = sizes.filter((s) => s.data().name.includes(name));
 
   return sizesFiltered.map(
     (doc) =>

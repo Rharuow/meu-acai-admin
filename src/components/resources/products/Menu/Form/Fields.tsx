@@ -1,19 +1,27 @@
-import { Menu, Size } from "@/src/entities/Product";
+import { Menu } from "@/src/entities/Product";
 import React from "react";
 import { Form } from "react-bootstrap";
 import CurrencyInput from "react-currency-input-field";
-import { AsyncPaginate, LoadOptions } from "react-select-async-paginate";
+import { AsyncPaginate } from "react-select-async-paginate";
 import { useFormContext } from "react-hook-form";
 import {
   getSizes,
   getSizesByName,
   getSizeTotalPage,
 } from "@/src/service/docs/sizes";
+import {
+  getCreams,
+  getCreamsByName,
+  getCreamTotalPage,
+} from "@/src/service/docs/creams";
+import {
+  getToppings,
+  getToppingsByName,
+  getToppingTotalPage,
+} from "@/src/service/docs/toppings";
 
 function Fields({ menu }: { menu?: Menu }) {
   const { register, setValue } = useFormContext();
-
-  // LoadOptions<Size, GroupBase<Size>, { page: any; }>
 
   const loadSizes = async (
     search: string,
@@ -39,14 +47,36 @@ function Fields({ menu }: { menu?: Menu }) {
     prevOptions: unknown,
     { page }: { page: number }
   ) => {
-    const sizes = !!search
-      ? await getSizesByName(search, page)
-      : await getSizes(page);
-    const sizeTotalPage = await getSizeTotalPage();
+    const creams = !!search
+      ? await getCreamsByName(search, page)
+      : await getCreams(page);
+    const creamTotalPage = await getCreamTotalPage();
 
     return {
-      options: sizes.map((size) => ({ value: size, label: size.name })),
-      hasMore: sizeTotalPage > page,
+      options: creams.map((cream) => ({ value: cream, label: cream.name })),
+      hasMore: creamTotalPage > page,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+
+  const loadToppings = async (
+    search: string,
+    prevOptions: unknown,
+    { page }: { page: number }
+  ) => {
+    const toppings = !!search
+      ? await getToppingsByName(search, page)
+      : await getToppings(page);
+    const toppingTotalPage = await getToppingTotalPage();
+
+    return {
+      options: toppings.map((topping) => ({
+        value: topping,
+        label: topping.name,
+      })),
+      hasMore: toppingTotalPage > page,
       additional: {
         page: page + 1,
       },
@@ -55,7 +85,7 @@ function Fields({ menu }: { menu?: Menu }) {
 
   return (
     <>
-      <Form.Group className="mb-3" controlId="formMenu">
+      <Form.Group className="mb-3" controlId="name">
         <Form.Label className="fw-bold text-primary">Nome</Form.Label>
         <Form.Control
           required
@@ -65,7 +95,7 @@ function Fields({ menu }: { menu?: Menu }) {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formMenu">
+      <Form.Group className="mb-3" controlId="value">
         <Form.Label className="fw-bold text-primary">Preço</Form.Label>
         <CurrencyInput
           required
@@ -75,15 +105,16 @@ function Fields({ menu }: { menu?: Menu }) {
           prefix="R$"
           decimalsLimit={2}
           onValueChange={(value, name = "value") => {
-            setValue(name, value);
+            setValue(name, parseFloat(`${value?.replace(/,/g, ".")}`));
           }}
           {...(menu?.value && { defaultValue: menu.value })}
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formMenu">
+      <Form.Group className="mb-3" controlId="sizes">
         <Form.Label className="fw-bold text-primary">Tamanhos</Form.Label>
         <AsyncPaginate
+          {...register("sizes")}
           isMulti
           additional={{
             page: 1,
@@ -93,15 +124,31 @@ function Fields({ menu }: { menu?: Menu }) {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="formMenu">
+      <Form.Group className="mb-3" controlId="creams">
         <Form.Label className="fw-bold text-primary">Cremes</Form.Label>
         <AsyncPaginate
+          {...register("creams")}
           isMulti
           additional={{
             page: 1,
           }}
           // @ts-expect-error
           loadOptions={loadCreams}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="toppings">
+        <Form.Label className="fw-bold text-primary">
+          Acompanhamentos
+        </Form.Label>
+        <AsyncPaginate
+          {...register("toppings")}
+          isMulti
+          additional={{
+            page: 1,
+          }}
+          // @ts-expect-error
+          loadOptions={loadToppings}
         />
       </Form.Group>
 

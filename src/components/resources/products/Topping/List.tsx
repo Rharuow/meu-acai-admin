@@ -114,9 +114,12 @@ export default function List() {
               setShowDeleteModal(false);
               topping && (await deleteTopping(topping.id));
               const allToppings = await getAllToppings();
-              toppings && setToppings(await getToppings(1, toppings.length));
-              setCurrentPage(allToppings.length);
-              setToppingsTotalPage(allToppings.length);
+              const newToppings = await getToppings(1, toppings.length);
+              const totalPages = Math.ceil(allToppings.length / 2);
+              setToppings(newToppings);
+              setToppingsTotalPage(totalPages);
+              currentPage > totalPages &&
+                setCurrentPage((prevState) => prevState - 1);
               setLoading(false);
             }}
           >

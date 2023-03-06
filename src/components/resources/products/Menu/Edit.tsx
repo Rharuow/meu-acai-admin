@@ -30,8 +30,8 @@ function Edit({
     Swal.fire({
       title: menuEdited ? "Perfeito" : "Opss",
       text: menuEdited
-        ? "O acompanhamento foi editado com sucesso!"
-        : "Os acompanhamentos devem ter nomes diferentes...",
+        ? "O produto foi editado com sucesso!"
+        : "Os produtos devem ter nomes diferentes...",
       icon: menuEdited ? "success" : "error",
       confirmButtonText: "OK",
     }).then(() => {

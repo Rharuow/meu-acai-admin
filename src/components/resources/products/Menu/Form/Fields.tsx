@@ -1,5 +1,5 @@
 import { Menu } from "@/src/entities/Product";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import CurrencyInput from "react-currency-input-field";
 import { AsyncPaginate } from "react-select-async-paginate";
@@ -105,6 +105,14 @@ function Fields({ menu }: { menu?: Menu }) {
       },
     };
   };
+
+  useEffect(() => {
+    menu && menu.creams && setValue("creams", menu.creams);
+    menu && menu.toppings && setValue("toppings", menu.toppings);
+    menu && menu.value && setValue("value", menu.value);
+    menu && menu.size && setValue("size", menu.size);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

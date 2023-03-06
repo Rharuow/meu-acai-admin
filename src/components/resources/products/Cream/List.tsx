@@ -1,5 +1,9 @@
 import LottiePlayer from "lottie-react";
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
@@ -157,12 +161,21 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {creams.length > 0 ? (
             <>
-              <Table variant="secondary" className="w-100" striped>
+              <Table variant="primary" className="w-100" striped>
                 <thead>
                   <tr>
-                    <th className=" text-center text-truncate">Nome</th>
-                    <th className=" text-center text-truncate">Estoque</th>
-                    <th className="text-center text-truncate">Ações</th>
+                    <th className=" text-center text-primary text-truncate">
+                      Nome
+                    </th>
+                    <th className=" text-center text-primary text-truncate">
+                      Estoque
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center  text-truncate">
+                      {isMobile ? <FontAwesomeIcon icon={faEye} /> : "Visível"}
+                    </th>
+                    <th className="text-center text-primary text-truncate">
+                      Ações
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -173,6 +186,13 @@ export default function List() {
                       </td>
                       <td className="fw-bold text-center align-middle p-1 text-primary">
                         {c.amount} {c.unit}
+                      </td>
+                      <td
+                        className={`fw-bold text-center align-middle p-1 text-${
+                          c.visible ? "success" : "danger"
+                        }`}
+                      >
+                        {c.visible ? "Sim" : "Não"}
                       </td>
                       <td className="align-middle">
                         <div className="d-flex">

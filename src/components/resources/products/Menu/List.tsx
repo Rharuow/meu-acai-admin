@@ -6,7 +6,11 @@ import {
   getMenus,
   getMenuTotalPage,
 } from "@/src/service/docs/menus";
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import LottiePlayer from "lottie-react";
 import React, { useEffect, useState } from "react";
@@ -156,12 +160,18 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {menus.length > 0 ? (
             <>
-              <Table responsive variant="secondary" striped>
+              <Table responsive variant="primary" striped>
                 <thead>
                   <tr>
                     <th className=" text-center text-truncate">Nome</th>
                     <th className=" text-center text-truncate">Valor</th>
-                    <th className="text-center text-truncate">Visível</th>
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                      {isMobile ? (
+                        <FontAwesomeIcon className="text-dark" icon={faEye} />
+                      ) : (
+                        "Visível"
+                      )}
+                    </th>
                     <th className="text-center text-truncate">Ações</th>
                   </tr>
                 </thead>

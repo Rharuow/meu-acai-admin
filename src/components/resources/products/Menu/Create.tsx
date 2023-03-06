@@ -16,11 +16,13 @@ export default function Create({
   const methods = useForm<Menu>();
   const [validated, setValidated] = useState(false);
 
-  const onSubmit = async (data: Menu) => {
+  const onSubmit = async (data: any) => {
     setValidated(true);
 
+    const { price, ...permitedData } = data;
+
     const dataFormatted: Menu = {
-      ...data,
+      ...permitedData,
       value: parseFloat(`${data.value}`.replace(/,/g, ".")),
     };
 

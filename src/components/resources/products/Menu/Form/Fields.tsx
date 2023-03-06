@@ -1,4 +1,4 @@
-import { Menu } from "@/src/entities/Product";
+import { Cream, Menu, Topping } from "@/src/entities/Product";
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import CurrencyInput from "react-currency-input-field";
@@ -22,7 +22,7 @@ import {
 import Switch from "react-switch";
 
 function Fields({ menu }: { menu?: Menu }) {
-  const { register, setValue, watch } = useFormContext();
+  const { register, setValue, watch, getValues } = useFormContext();
 
   const [creamsOptions, setCreamsOptions] = useState(
     menu
@@ -132,13 +132,13 @@ function Fields({ menu }: { menu?: Menu }) {
         <Form.Label className="fw-bold text-primary">Preço</Form.Label>
         <CurrencyInput
           required
-          {...register("value")}
+          {...register("price")}
           className="form-control"
           placeholder="Qual o valor desse produto?"
           prefix="R$"
           decimalsLimit={2}
-          onValueChange={(value, name = "value") => {
-            setValue(name, parseFloat(`${value?.replace(/,/g, ".")}`));
+          onValueChange={(value) => {
+            setValue("value", parseFloat(`${value?.replace(/,/g, ".")}`));
           }}
           {...(menu?.value && { defaultValue: menu.value })}
         />
@@ -166,7 +166,7 @@ function Fields({ menu }: { menu?: Menu }) {
       <Form.Group className="mb-3" controlId="creams">
         <Form.Label className="fw-bold text-primary">Cremes</Form.Label>
         <AsyncPaginate
-          key={creamsOptions.length}
+          {...(menu && { key: creamsOptions.length })}
           {...register("creams")}
           isMulti
           required
@@ -176,7 +176,10 @@ function Fields({ menu }: { menu?: Menu }) {
               e.map(({ value }) => value)
             );
             setCreamsOptions(
-              e.map(({ value }) => ({ value: value, label: value.name }))
+              getValues("creams").map((cream: Cream) => ({
+                value: cream,
+                label: cream.name,
+              }))
             );
           }}
           {...(menu?.creams && {
@@ -195,7 +198,7 @@ function Fields({ menu }: { menu?: Menu }) {
           Acompanhamentos
         </Form.Label>
         <AsyncPaginate
-          key={toppingsOptions.length}
+          {...(menu && { key: toppingsOptions.length })}
           {...register("toppings")}
           isMulti
           onChange={(e) => {
@@ -203,8 +206,11 @@ function Fields({ menu }: { menu?: Menu }) {
               "toppings",
               e.map(({ value }) => value)
             );
-            setToppingsOptions(
-              e.map(({ value }) => ({ value: value, label: value.name }))
+            setCreamsOptions(
+              getValues("toppings").map((topping: Topping) => ({
+                value: topping,
+                label: topping.name,
+              }))
             );
           }}
           {...(menu?.toppings && {

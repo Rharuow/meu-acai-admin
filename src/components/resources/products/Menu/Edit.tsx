@@ -27,6 +27,7 @@ function Edit({
     };
 
     const menuEdited = menu && (await updateMenu(menu.id, dataFormatted));
+
     Swal.fire({
       title: menuEdited ? "Perfeito" : "Opss",
       text: menuEdited

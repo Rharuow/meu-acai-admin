@@ -8,12 +8,14 @@ import {
 } from "@/src/service/docs/menus";
 import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LottiePlayer from "lottie-react";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Table } from "react-bootstrap";
 import ReactLoading from "react-loading";
 import { useProductContext } from "..";
 import Create from "./Create";
 import Edit from "./Edit";
+import finishedAnimation from "@/src/components/lottie/finished.json";
 
 export default function List() {
   const { menus, menusTotalPage, setMenus, setMenusTotalPage } =
@@ -61,8 +63,10 @@ export default function List() {
           <Edit
             menu={menu}
             action={async () => {
+              setLoading(true);
               setShowEditModal(false);
-              await getMenus();
+              setMenus(await getMenus(1, menus.length));
+              setLoading(false);
             }}
           >
             <div className="d-flex justify-content-end">
@@ -103,7 +107,10 @@ export default function List() {
               setLoading(true);
               setShowDeleteModal(false);
               menu && (await deleteMenu(menu.id));
-              await getMenus();
+              const allMenus = await getAllMenus();
+              setMenus(allMenus);
+              setCurrentPage(1);
+              setMenusTotalPage(Math.ceil(allMenus.length / 5));
               setLoading(false);
             }}
           >
@@ -120,10 +127,10 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              const creamsTotalPage = await getMenuTotalPage();
+              const menusTotalPage = await getMenuTotalPage();
               setMenus(await getAllMenus());
-              setMenusTotalPage(creamsTotalPage);
-              setCurrentPage(creamsTotalPage);
+              setMenusTotalPage(menusTotalPage);
+              setCurrentPage(menusTotalPage);
             }}
           >
             <div className="d-flex justify-content-end">
@@ -220,11 +227,49 @@ export default function List() {
                       </td>
                     </tr>
                   ))}
+                  {loadingMenu && (
+                    <tr>
+                      <td colSpan={3}>
+                        <div className="d-flex justify-content-center">
+                          <ReactLoading
+                            type="spinningBubbles"
+                            color="#46295a"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className={menusTotalPage >= currentPage ? " " : "p-0"}
+                    >
+                      {menusTotalPage >= currentPage + 1 ? (
+                        <div className="d-flex justify-content-center">
+                          <Button
+                            className="success-outline"
+                            onClick={() => handlePagination()}
+                          >
+                            +
+                          </Button>
+                        </div>
+                      ) : (
+                        <LottiePlayer
+                          animationData={finishedAnimation}
+                          className="h-80px"
+                        />
+                      )}
+                    </td>
+                  </tr>
+                </tfoot>
               </Table>
-              <Button className="mt-3" onClick={() => setShowCreateModal(true)}>
-                Add Produto
-              </Button>
+              <div className="d-flex justify-content-center w-100">
+                <Button onClick={() => setShowCreateModal(true)}>
+                  Add Produto
+                </Button>
+              </div>
             </>
           ) : (
             <div className="d-flex justify-content-center flex-wrap align-items-center">

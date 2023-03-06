@@ -19,9 +19,10 @@ import {
   getToppingsByName,
   getToppingTotalPage,
 } from "@/src/service/docs/toppings";
+import Switch from "react-switch";
 
 function Fields({ menu }: { menu?: Menu }) {
-  const { register, setValue } = useFormContext();
+  const { register, setValue, watch } = useFormContext();
 
   const [creamsOptions, setCreamsOptions] = useState(
     menu
@@ -109,6 +110,7 @@ function Fields({ menu }: { menu?: Menu }) {
   useEffect(() => {
     menu && menu.creams && setValue("creams", menu.creams);
     menu && menu.toppings && setValue("toppings", menu.toppings);
+    menu && menu.visible && setValue("visible", menu.visible);
     menu && menu.value && setValue("value", menu.value);
     menu && menu.size && setValue("size", menu.size);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -214,6 +216,17 @@ function Fields({ menu }: { menu?: Menu }) {
           required
           // @ts-expect-error
           loadOptions={loadToppings}
+        />
+      </Form.Group>
+
+      <Form.Group className="mb-3 d-flex" controlId="value">
+        <Form.Label className="fw-bold text-primary me-3">Visível</Form.Label>
+        <Switch
+          {...register("visible")}
+          onChange={(e) => setValue("visible", e)}
+          checked={watch("visible")}
+          onColor="#198754"
+          offColor="#ff4136"
         />
       </Form.Group>
 

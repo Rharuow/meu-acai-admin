@@ -1,5 +1,10 @@
 import LottiePlayer from "lottie-react";
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faMoneyBill1Wave,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Pagination, Table } from "react-bootstrap";
@@ -161,16 +166,31 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {sizes.length > 0 ? (
             <>
-              <Table className="w-100" variant="secondary" striped>
+              <Table responsive variant="primary" striped>
                 <thead>
                   <tr>
-                    <th className=" px-1 text-center text-truncate">Nome</th>
-                    <th className=" px-1 text-center text-truncate">Valor</th>
-                    <th className=" px-1 max-w-65px text-center text-truncate">
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                      Nome
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                      <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
                       Acompanhamento
                     </th>
-                    <th className=" px-1 text-center text-truncate">Cremes</th>
-                    <th className=" px-1text-center text-truncate">Ações</th>
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                      Cremes
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                      {isMobile ? (
+                        <FontAwesomeIcon className="text-dark" icon={faEye} />
+                      ) : (
+                        "Visível"
+                      )}
+                    </th>
+                    <th className="text-primary max-w-65px px-1text-center text-truncate">
+                      Ações
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -180,7 +200,6 @@ export default function List() {
                         {s.name}
                       </td>
                       <td className="fw-bold text-center align-middle p-1 text-primary">
-                        R${" "}
                         {s.value.toLocaleString("pt-BR", {
                           minimumFractionDigits: 2,
                         })}
@@ -191,6 +210,13 @@ export default function List() {
                       <td className="fw-bold text-center align-middle p-1 text-primary">
                         {s.amountOptions}
                       </td>
+                      <td
+                        className={`fw-bold text-center align-middle p-1 text-${
+                          s.visible ? "success" : "danger"
+                        }`}
+                      >
+                        {s.visible ? "Sim" : "Não"}
+                      </td>
                       <td className="align-middle">
                         <div className="d-flex">
                           {isMobile ? (
@@ -200,14 +226,20 @@ export default function List() {
                                 variant="warning-dark"
                                 onClick={() => handleEdit(index)}
                               >
-                                <FontAwesomeIcon icon={faPencilAlt} />
+                                <FontAwesomeIcon
+                                  className="text-white"
+                                  icon={faPencilAlt}
+                                />
                               </Button>
                               <Button
                                 size="sm"
                                 variant="danger-dark"
                                 onClick={() => handleDelete(index)}
                               >
-                                <FontAwesomeIcon icon={faTrashAlt} />
+                                <FontAwesomeIcon
+                                  className="text-white"
+                                  icon={faTrashAlt}
+                                />
                               </Button>
                             </ButtonGroup>
                           ) : (
@@ -217,7 +249,10 @@ export default function List() {
                                 variant="warning-dark"
                                 onClick={() => handleEdit(index)}
                               >
-                                <FontAwesomeIcon icon={faPencilAlt} />
+                                <FontAwesomeIcon
+                                  className="text-white"
+                                  icon={faPencilAlt}
+                                />
                               </Button>
                               <Button
                                 size="sm"
@@ -225,7 +260,10 @@ export default function List() {
                                 variant="danger-dark"
                                 onClick={() => handleDelete(index)}
                               >
-                                <FontAwesomeIcon icon={faTrashAlt} />
+                                <FontAwesomeIcon
+                                  className="text-white"
+                                  icon={faTrashAlt}
+                                />
                               </Button>
                             </>
                           )}
@@ -249,7 +287,7 @@ export default function List() {
                 <tfoot>
                   <tr>
                     <td
-                      colSpan={5}
+                      colSpan={6}
                       className={sizesTotalPage >= currentPage ? " " : "p-0"}
                     >
                       {sizesTotalPage >= currentPage + 1 ? (

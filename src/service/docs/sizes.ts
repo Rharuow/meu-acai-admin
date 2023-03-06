@@ -107,7 +107,7 @@ export const deleteSize = async (id: string) =>
 export const updateSize = async (id: string, data: any) => {
   const sizeRef = doc(db, "sizes", id);
   try {
-    await updateDoc(sizeRef, data);
+    const size = await updateDoc(sizeRef, data);
     return true;
   } catch (error) {
     return false;

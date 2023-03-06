@@ -27,6 +27,7 @@ function Edit({
     };
 
     const sizeEdited = size && (await updateSize(size.id, dataFormatted));
+    console.log(size);
     Swal.fire({
       title: sizeEdited ? "Perfeito" : "Opss",
       text: sizeEdited

@@ -200,7 +200,7 @@ export default function List() {
                             <ButtonGroup>
                               <Button
                                 size="sm"
-                                variant="warning-dark"
+                                variant="warning-dark text-white"
                                 onClick={() => handleEdit(index)}
                               >
                                 <FontAwesomeIcon icon={faPencilAlt} />
@@ -217,7 +217,7 @@ export default function List() {
                             <>
                               <Button
                                 size="sm"
-                                variant="warning-dark"
+                                variant="warning-dark text-white"
                                 onClick={() => handleEdit(index)}
                               >
                                 <FontAwesomeIcon icon={faPencilAlt} />
@@ -238,7 +238,7 @@ export default function List() {
                   ))}
                   {loadingCreams && (
                     <tr>
-                      <td colSpan={3}>
+                      <td colSpan={4}>
                         <div className="d-flex justify-content-center">
                           <ReactLoading
                             type="spinningBubbles"
@@ -252,7 +252,7 @@ export default function List() {
                 <tfoot>
                   <tr>
                     <td
-                      colSpan={3}
+                      colSpan={4}
                       className={creamsTotalPage >= currentPage ? " " : "p-0"}
                     >
                       {creamsTotalPage >= currentPage + 1 ? (

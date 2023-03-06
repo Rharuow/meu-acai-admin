@@ -1,5 +1,10 @@
 import LottiePlayer from "lottie-react";
-import { faPencilAlt, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faMoneyBill1Wave,
+  faPencilAlt,
+  faTrashAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Button, ButtonGroup, Modal, Pagination, Table } from "react-bootstrap";
@@ -165,13 +170,28 @@ export default function List() {
         <div className="d-flex justify-content-center flex-wrap align-items-center">
           {toppings.length > 0 ? (
             <>
-              <Table className="w-100" variant="secondary" striped>
+              <Table responsive variant="primary" striped>
                 <thead>
                   <tr>
-                    <th className=" text-center text-truncate">Nome</th>
-                    <th className=" text-center text-truncate">Valor</th>
-                    <th className="text-center text-truncate">Estoque</th>
-                    <th className="text-center text-truncate">Ações</th>
+                    <th className=" text-center max-w-65px text-primary text-truncate">
+                      Nome
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                      <FontAwesomeIcon icon={faMoneyBill1Wave} />
+                    </th>
+                    <th className="text-center max-w-65px text-primary text-truncate">
+                      Estoque
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center  text-truncate">
+                      {isMobile ? (
+                        <FontAwesomeIcon className="text-dark" icon={faEye} />
+                      ) : (
+                        "Visível"
+                      )}
+                    </th>
+                    <th className="text-center text-primary text-truncate">
+                      Ações
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -189,6 +209,13 @@ export default function List() {
                       <td className="fw-bold text-center align-middle p-1 text-primary">
                         {t.amount} {t.unit}
                       </td>
+                      <td
+                        className={`fw-bold text-center align-middle p-1 text-${
+                          t.visible ? "success" : "danger"
+                        }`}
+                      >
+                        {t.visible ? "Sim" : "Não"}
+                      </td>
 
                       <td className="align-middle">
                         <div className="d-flex">
@@ -196,7 +223,7 @@ export default function List() {
                             <ButtonGroup>
                               <Button
                                 size="sm"
-                                variant="warning-dark"
+                                variant="warning-dark text-white"
                                 onClick={() => handleEdit(index)}
                               >
                                 <FontAwesomeIcon icon={faPencilAlt} />
@@ -213,7 +240,7 @@ export default function List() {
                             <>
                               <Button
                                 size="sm"
-                                variant="warning-dark"
+                                variant="warning-dark text-white"
                                 onClick={() => handleEdit(index)}
                               >
                                 <FontAwesomeIcon icon={faPencilAlt} />
@@ -234,7 +261,7 @@ export default function List() {
                   ))}
                   {loadingToppings && (
                     <tr>
-                      <td colSpan={4}>
+                      <td colSpan={5}>
                         <div className="d-flex justify-content-center">
                           <ReactLoading
                             type="spinningBubbles"
@@ -248,7 +275,7 @@ export default function List() {
                 <tfoot>
                   <tr>
                     <td
-                      colSpan={4}
+                      colSpan={5}
                       className={toppingsTotalPage >= currentPage ? " " : "p-0"}
                     >
                       {toppingsTotalPage >= currentPage + 1 ? (

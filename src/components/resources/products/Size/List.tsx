@@ -273,7 +273,7 @@ export default function List() {
                   ))}
                   {loadingSize && (
                     <tr>
-                      <td colSpan={5}>
+                      <td colSpan={6}>
                         <div className="d-flex justify-content-center">
                           <ReactLoading
                             type="spinningBubbles"

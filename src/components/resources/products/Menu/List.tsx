@@ -228,6 +228,7 @@ export default function List() {
                               <Button
                                 size="sm"
                                 variant="warning-dark"
+                                className="text-white"
                                 onClick={() => handleEdit(index)}
                               >
                                 <FontAwesomeIcon

@@ -21,9 +21,22 @@ import {
 } from "@/src/service/docs/toppings";
 
 function Fields({ menu }: { menu?: Menu }) {
-  const { register, setValue, getValues } = useFormContext();
+  const { register, setValue } = useFormContext();
 
-  const [loadingCreams, setLoadingCreams] = useState(0);
+  const [creamsOptions, setCreamsOptions] = useState(
+    menu
+      ? menu.creams.map((cream) => ({ value: cream, label: cream.name }))
+      : []
+  );
+
+  const [toppingsOptions, setToppingsOptions] = useState(
+    menu && menu.toppings
+      ? menu.toppings.map((topping) => ({
+          value: topping,
+          label: topping.name,
+        }))
+      : []
+  );
 
   const loadSizes = async (
     search: string,
@@ -55,7 +68,7 @@ function Fields({ menu }: { menu?: Menu }) {
     const creamTotalPage = await getCreamTotalPage();
 
     const options = creams.filter((cream) =>
-      menu?.creams.every((c) => c.name !== cream.name)
+      creamsOptions.every((c) => c.value.name !== cream.name)
     );
 
     return {
@@ -77,9 +90,8 @@ function Fields({ menu }: { menu?: Menu }) {
       : await getToppings(page);
     const toppingTotalPage = await getToppingTotalPage();
 
-    const options = toppings.filter(
-      (topping) =>
-        menu?.toppings && menu?.toppings.every((t) => t.name !== topping.name)
+    const options = toppings.filter((topping) =>
+      toppingsOptions.every((t) => t.value.name !== topping.name)
     );
 
     return {
@@ -144,22 +156,21 @@ function Fields({ menu }: { menu?: Menu }) {
       <Form.Group className="mb-3" controlId="creams">
         <Form.Label className="fw-bold text-primary">Cremes</Form.Label>
         <AsyncPaginate
-          key={loadingCreams}
+          key={creamsOptions.length}
           {...register("creams")}
           isMulti
           required
-          loadOptionsOnMenuOpen
           onChange={(e) => {
             setValue(
               "creams",
               e.map(({ value }) => value)
             );
+            setCreamsOptions(
+              e.map(({ value }) => ({ value: value, label: value.name }))
+            );
           }}
           {...(menu?.creams && {
-            defaultValue: menu.creams.map((cream) => ({
-              value: cream,
-              label: cream.name,
-            })),
+            defaultValue: creamsOptions,
           })}
           additional={{
             page: 1,
@@ -174,6 +185,7 @@ function Fields({ menu }: { menu?: Menu }) {
           Acompanhamentos
         </Form.Label>
         <AsyncPaginate
+          key={toppingsOptions.length}
           {...register("toppings")}
           isMulti
           onChange={(e) => {
@@ -181,12 +193,12 @@ function Fields({ menu }: { menu?: Menu }) {
               "toppings",
               e.map(({ value }) => value)
             );
+            setToppingsOptions(
+              e.map(({ value }) => ({ value: value, label: value.name }))
+            );
           }}
           {...(menu?.toppings && {
-            defaultValue: menu.toppings.map((topping) => ({
-              value: topping,
-              label: topping.name,
-            })),
+            defaultValue: toppingsOptions,
           })}
           additional={{
             page: 1,

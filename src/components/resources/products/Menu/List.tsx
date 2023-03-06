@@ -163,16 +163,22 @@ export default function List() {
               <Table responsive variant="primary" striped>
                 <thead>
                   <tr>
-                    <th className=" text-center text-truncate">Nome</th>
-                    <th className=" text-center text-truncate">Valor</th>
-                    <th className=" px-1 text-primary max-w-65px text-center text-truncate">
+                    <th className=" text-center text-primary text-truncate">
+                      Nome
+                    </th>
+                    <th className=" text-center text-primary text-truncate">
+                      Valor
+                    </th>
+                    <th className=" px-1 text-primary max-w-65px text-center  text-truncate">
                       {isMobile ? (
                         <FontAwesomeIcon className="text-dark" icon={faEye} />
                       ) : (
                         "Visível"
                       )}
                     </th>
-                    <th className="text-center text-truncate">Ações</th>
+                    <th className="text-center text-primary text-truncate">
+                      Ações
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -204,7 +210,10 @@ export default function List() {
                                 variant="warning-dark"
                                 onClick={() => handleEdit(index)}
                               >
-                                <FontAwesomeIcon icon={faPencilAlt} />
+                                <FontAwesomeIcon
+                                  className="text-white"
+                                  icon={faPencilAlt}
+                                />
                               </Button>
                               <Button
                                 size="sm"
@@ -221,7 +230,10 @@ export default function List() {
                                 variant="warning-dark"
                                 onClick={() => handleEdit(index)}
                               >
-                                <FontAwesomeIcon icon={faPencilAlt} />
+                                <FontAwesomeIcon
+                                  className="text-white"
+                                  icon={faPencilAlt}
+                                />
                               </Button>
                               <Button
                                 size="sm"

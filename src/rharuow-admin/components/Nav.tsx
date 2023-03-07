@@ -33,14 +33,16 @@ export default function NavComponent({
 
   return (
     <div className={`d-flex p-3 bg-primary rounded-bottom mb-3 ${className}`}>
-      <Image
-        alt="logo"
-        priority
-        src={`/product/logo${theme === "dark" ? "-dark.png" : ".png"}`}
-        className="rounded-circle"
-        width={size ? size : width}
-        height={size ? size : height}
-      />
+      <Link href="/">
+        <Image
+          alt="logo"
+          priority
+          src={`/product/logo${theme === "dark" ? "-dark.png" : ".png"}`}
+          className="rounded-circle"
+          width={size ? size : width}
+          height={size ? size : height}
+        />
+      </Link>
       <div className="d-flex"></div>
       <div className="d-flex w-100 align-items-center justify-content-end">
         <Navbar expand="md" expanded={expanded}>

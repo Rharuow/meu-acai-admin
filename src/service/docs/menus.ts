@@ -118,5 +118,5 @@ export const updateMenu = async (id: string, data: any) => {
 export const amountMenu = async () =>
   (await getDocs(menuCollection)).docs.length;
 
-export const getMenuTotalPage = async () =>
-  Math.ceil((await amountMenu()) / perPageDefault);
+export const getMenuTotalPage = (length: number) =>
+  Math.ceil(length / perPageDefault);

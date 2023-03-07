@@ -119,5 +119,5 @@ export const updateSize = async (id: string, data: any) => {
 export const amountSize = async () =>
   (await getDocs(sizeCollection)).docs.length;
 
-export const getSizeTotalPage = async () =>
-  Math.ceil((await amountSize()) / perPageDefault);
+export const getSizeTotalPage = (length: number) =>
+  Math.ceil(length / perPageDefault);

@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import { User } from "@/src/entities/User";
-import { timeStampToDateFormTag } from "@/src/rharuow-admin/util/dateHandler";
 import { phoneFormatter } from "@/src/rharuow-admin/util/phoneHandler";
 import listAddress from "@/src/utils/address";
 import Separator from "@/src/rharuow-admin/components/Separator";
@@ -35,12 +34,13 @@ function Fields({ user }: { user: User }) {
       setIsActive(!!user.isActive);
       setValue("isActive", !!user.isActive);
       user.members &&
+        user.members.length > fields.length &&
         user.members.forEach((member) => {
           append({ name: member.name, birthday: member.birthday });
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, []);
 
   return (
     <div className="">
@@ -61,7 +61,7 @@ function Fields({ user }: { user: User }) {
           type="date"
           {...(user &&
             user.birthday && {
-              defaultValue: `${timeStampToDateFormTag(user.birthday)}`,
+              defaultValue: user.birthday,
             })}
         />
       </Form.Group>
@@ -161,7 +161,11 @@ function Fields({ user }: { user: User }) {
               className="mb-3"
               onClick={() => remove(index)}
             >
-              <FontAwesomeIcon size="sm" icon={faTrash} />
+              <FontAwesomeIcon
+                size="sm"
+                className="text-white"
+                icon={faTrash}
+              />
             </Button>
           </div>
         ))}

@@ -1,7 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
-const { DateTime } = require("luxon");
-
 export enum RolesEnum {
   ADMIN = "admin",
   USER = "user",
@@ -15,7 +11,7 @@ export type Role = {
 export type User = {
   id: string;
   name: string;
-  birthday?: Timestamp;
+  birthday?: string;
   phone: string;
   isActive: boolean;
   address: {

@@ -18,7 +18,12 @@ import { db, userCollection } from "../firebase";
 
 let lastVisible: any = false;
 
-export const getUsers = async (page: number = 1, perPage: number = 10) => {
+const perPageDefault = 10;
+
+export const listUsers = async (
+  page: number = 1,
+  perPage: number = perPageDefault
+) => {
   const q = lastVisible
     ? query(
         userCollection,
@@ -81,3 +86,6 @@ export const updateUser = async (id: string, data: any) => {
     return false;
   }
 };
+
+export const getUserTotalPage = (length: number) =>
+  Math.ceil(length / perPageDefault);

@@ -120,5 +120,5 @@ export const updateTopping = async (id: string, data: any) => {
 export const amountTopping = async () =>
   (await getDocs(toppingCollection)).docs.length;
 
-export const getToppingTotalPage = async () =>
-  Math.ceil((await amountTopping()) / perPageDefault);
+export const getToppingTotalPage = (length: number) =>
+  Math.ceil(length / perPageDefault);

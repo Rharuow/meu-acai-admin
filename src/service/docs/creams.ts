@@ -119,5 +119,5 @@ export const updateCream = async (id: string, data: any) => {
 export const amountCream = async () =>
   (await getDocs(creamCollection)).docs.length;
 
-export const getCreamTotalPage = async () =>
-  Math.ceil((await amountCream()) / perPageDefault);
+export const getCreamTotalPage = (lengths: number) =>
+  Math.ceil(length / perPageDefault);

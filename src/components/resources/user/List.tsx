@@ -11,13 +11,14 @@ import { useForm, FormProvider } from "react-hook-form";
 import { User } from "@/src/entities/User";
 import { useWindowSize } from "@/src/rharuow-admin/Hooks/windowsize";
 import { splitString } from "@/src/rharuow-admin/util/textHandler";
-import { deleteUser } from "@/src/service/docs/users";
+import { deleteUser, listUsers, updateUser } from "@/src/service/docs/users";
 import { useUsersContext } from ".";
 
 import Fields from "./Form/Fields";
+import Swal from "sweetalert2";
 
 function TableComponent() {
-  const { users } = useUsersContext();
+  const { users, setUsers, setLoading } = useUsersContext();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -38,11 +39,24 @@ function TableComponent() {
   };
 
   const onSubmit = async (data: any) => {
-    // console.log(data);
+    setLoading(true);
+    const userUpdated = user && (await updateUser(user.id, data));
+
+    if (userUpdated) {
+      Swal.fire({
+        title: "Perfeito!",
+        text: "Usuário atualizado com sucesso",
+        icon: "success",
+      });
+      setUsers(
+        (await listUsers(1, users.length)).filter((u) => u.name !== user?.name)
+      );
+    }
+    setLoading(false);
   };
 
   return (
-    <Table responsive variant="secondary" striped>
+    <Table responsive variant="primary" striped>
       <Modal
         show={showDeleteModal}
         onHide={() => setShowDeleteModal(false)}
@@ -87,18 +101,12 @@ function TableComponent() {
             <Modal.Body>{user && <Fields user={user} />}</Modal.Body>
             <Modal.Footer>
               <Button
-                variant="outline-danger"
+                variant="danger text-white"
                 onClick={() => setShowEditModal(false)}
               >
                 Cancel
               </Button>
-              <Button
-                variant="outline-success"
-                onClick={async () => {
-                  setShowEditModal(false);
-                  window.location.reload();
-                }}
-              >
+              <Button variant="success" type="submit">
                 Salvar
               </Button>
             </Modal.Footer>
@@ -108,10 +116,10 @@ function TableComponent() {
 
       <thead>
         <tr>
-          <th>Nome</th>
-          <th>Ativo</th>
-          <th>Wallet</th>
-          <th>Ações</th>
+          <th className="text-primary">Nome</th>
+          <th className="text-primary">Ativo</th>
+          <th className="text-primary">Wallet</th>
+          <th className="text-primary">Ações</th>
         </tr>
       </thead>
       <tbody>
@@ -145,7 +153,10 @@ function TableComponent() {
                       variant="warning-dark"
                       onClick={() => handleEdit(index)}
                     >
-                      <FontAwesomeIcon icon={faPencilAlt} />
+                      <FontAwesomeIcon
+                        className="text-white"
+                        icon={faPencilAlt}
+                      />
                     </Button>
                     <Button
                       size="sm"
@@ -162,7 +173,10 @@ function TableComponent() {
                       variant="warning-dark"
                       onClick={() => handleEdit(index)}
                     >
-                      <FontAwesomeIcon icon={faPencilAlt} />
+                      <FontAwesomeIcon
+                        className="text-white"
+                        icon={faPencilAlt}
+                      />
                     </Button>
                     <Button
                       size="sm"

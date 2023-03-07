@@ -18,6 +18,7 @@ function Fields({ user }: { user: User }) {
   const { houses, squares } = listAddress();
 
   const [isActive, setIsActive] = useState(!!user?.isActive);
+  const [isBloqued, setIsBloqued] = useState(!!user?.isBloqued);
 
   const { fields, append, remove } = useFieldArray({
     control: control,
@@ -28,14 +29,20 @@ function Fields({ user }: { user: User }) {
     setIsActive((pervState) => !pervState);
     setValue("isActive", !isActive);
   };
+  const handleBloqued = () => {
+    setIsBloqued((pervState) => !pervState);
+    setValue("isBloqued", !isBloqued);
+  };
 
   useEffect(() => {
     if (user) {
       setIsActive(!!user.isActive);
       setValue("isActive", !!user.isActive);
+      setValue("isBloqued", !!user.isBloqued);
       user.members &&
         user.members.length > fields.length &&
         user.members.forEach((member) => {
+          console.log("Passou");
           append({ name: member.name, birthday: member.birthday });
         });
     }
@@ -126,6 +133,21 @@ function Fields({ user }: { user: User }) {
             {...register("isActive")}
             onChange={handleActivated}
             checked={!!isActive}
+            onColor="#198754"
+            offColor="#ff4136"
+          />
+        </div>
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label className="fw-bold text-primary">
+          {isBloqued ? "Desbloquear?" : "Bloquear?"}
+        </Form.Label>
+        <div className="d-flex align-items-center">
+          <Switch
+            {...register("isBloqued")}
+            onChange={handleBloqued}
+            checked={!!isBloqued}
             onColor="#198754"
             offColor="#ff4136"
           />

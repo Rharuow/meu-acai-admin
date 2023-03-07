@@ -16,9 +16,11 @@ import { useUsersContext } from ".";
 
 import Fields from "./Form/Fields";
 import Swal from "sweetalert2";
+import { useSessionContext } from "@/src/rharuow-admin/context/Session";
 
 function TableComponent() {
   const { users, setUsers, setLoading } = useUsersContext();
+  const { user: userSession } = useSessionContext();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -49,7 +51,9 @@ function TableComponent() {
         icon: "success",
       });
       setUsers(
-        (await listUsers(1, users.length)).filter((u) => u.name !== user?.name)
+        (await listUsers(1, users.length > 10 ? users.length : 10)).filter(
+          (u) => u.name !== userSession?.name
+        )
       );
     }
     setLoading(false);

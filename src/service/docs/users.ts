@@ -4,11 +4,13 @@ import {
   collectionGroup,
   deleteDoc,
   doc,
+  DocumentData,
   getDoc,
   getDocs,
   limit,
   orderBy,
   query,
+  QueryDocumentSnapshot,
   startAfter,
   updateDoc,
   where,
@@ -16,7 +18,7 @@ import {
 
 import { db, userCollection } from "../firebase";
 
-let lastVisible: any = false;
+let lastVisible: QueryDocumentSnapshot<DocumentData>;
 
 const perPageDefault = 10;
 
@@ -24,17 +26,19 @@ export const listUsers = async (
   page: number = 1,
   perPage: number = perPageDefault
 ) => {
-  const q = lastVisible
-    ? query(
-        userCollection,
-        orderBy("name"),
-        startAfter(lastVisible),
-        limit(perPage)
-      )
-    : query(userCollection, orderBy("name"), limit(perPage));
+  console.log(page > 1);
+  const q =
+    page > 1
+      ? query(
+          userCollection,
+          orderBy("name"),
+          startAfter(lastVisible),
+          limit(perPage)
+        )
+      : query(userCollection, orderBy("name"), limit(perPage));
   const users = await getDocs(q);
 
-  lastVisible = page > 1 ? users.docs[users.docs.length - 1] : false;
+  lastVisible = users.docs[users.docs.length - 1];
 
   return users.docs.map(
     (doc) =>

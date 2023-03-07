@@ -14,6 +14,7 @@ export type User = {
   birthday?: string;
   phone: string;
   isActive: boolean;
+  isBloqued: boolean;
   address: {
     house: number;
     square: number;

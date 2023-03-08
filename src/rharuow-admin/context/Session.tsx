@@ -39,7 +39,12 @@ export default function SessionProvider({
       // router.push("/");
     }
 
-    if (!userCookied) {
+    if (
+      !userCookied &&
+      router.pathname !== "/signup" &&
+      router.pathname !== "/recovery" &&
+      router.pathname !== "/confirmation"
+    ) {
       console.log("Not have user");
       setUser(undefined);
       router.push("/");

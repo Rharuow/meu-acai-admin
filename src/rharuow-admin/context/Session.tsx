@@ -2,16 +2,12 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import ReactLoading from "../components/ReactLoading";
-
-export interface IUserAdmin {
-  name: string;
-  role: string;
-}
+import { Admin } from "@/src/entities/User";
 
 interface ISessionContext {
   sessionLoading: boolean;
-  user: IUserAdmin | undefined;
-  setUser: React.Dispatch<React.SetStateAction<IUserAdmin | undefined>>;
+  user: Admin | undefined;
+  setUser: React.Dispatch<React.SetStateAction<Admin | undefined>>;
 }
 
 const SessionContext = createContext({} as ISessionContext);
@@ -24,14 +20,12 @@ export default function SessionProvider({
   children: React.ReactNode;
 }) {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<IUserAdmin>();
+  const [user, setUser] = useState<Admin>();
 
   const router = useRouter();
 
   useEffect(() => {
-    const userCookied = JSON.parse(
-      Cookies.get("user") || "false"
-    ) as IUserAdmin;
+    const userCookied = JSON.parse(Cookies.get("user") || "false") as Admin;
 
     if (userCookied && !user) {
       console.log("Not have user YET");

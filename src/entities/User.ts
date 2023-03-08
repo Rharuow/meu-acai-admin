@@ -8,6 +8,11 @@ export type Role = {
   name: RolesEnum.ADMIN | RolesEnum.USER;
 };
 
+export type Admin = {
+  name: string;
+  password: string;
+};
+
 export type User = {
   id: string;
   name: string;

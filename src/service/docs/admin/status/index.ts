@@ -1,5 +1,5 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db, adminCollection } from "../../../firebase";
+import { db } from "../../../firebase";
 
 const adminRef = doc(db, "admin", "IQpSlkYb9kEsiRYKNaPH");
 

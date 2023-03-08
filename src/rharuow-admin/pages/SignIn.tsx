@@ -4,10 +4,11 @@ import { Button, Card, Form } from "react-bootstrap";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useRouter } from "next/router";
 import Swal from "sweetalert2";
+import { MD5, SHA256 } from "crypto-js";
 
 import { useSessionContext } from "../context/Session";
 import Cookies from "js-cookie";
-import { getAdmin } from "@/src/service/docs/users";
+import { getAdmin } from "@/src/service/docs/admin";
 
 type Inputs = {
   username: string;
@@ -26,14 +27,17 @@ export default function SignIn() {
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     const admin = await getAdmin({
       name: data.username,
-      password: data.password,
+      password: SHA256(data.password).toString(),
     });
     if (admin) {
       Cookies.set(
         "user",
-        JSON.stringify({ name: admin.name, role: admin.role })
+        JSON.stringify({
+          name: admin.name,
+          password: SHA256(admin.password).toString(),
+        })
       );
-      setUser({ name: admin.name, role: admin.role });
+      setUser({ ...admin, password: SHA256(admin.password).toString() });
       router.push("/");
     } else
       Swal.fire({

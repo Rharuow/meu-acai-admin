@@ -26,7 +26,6 @@ export const listUsers = async (
   page: number = 1,
   perPage: number = perPageDefault
 ) => {
-  console.log(page > 1);
   const q =
     page > 1
       ? query(

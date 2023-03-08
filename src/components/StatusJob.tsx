@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Switch from "react-switch";
-import { getStatus, updateStatus } from "../service/docs/admin/status";
+import { updateStatus } from "../service/docs/admin/status";
 import { useStoreContext } from "../context/store";
 import ReactLoading from "../rharuow-admin/components/ReactLoading";
 

@@ -44,7 +44,6 @@ function Fields({ user }: { user: User }) {
       user.members &&
         user.members.length > fields.length &&
         user.members.forEach((member) => {
-          console.log("Passou");
           append({ name: member.name, birthday: member.birthday });
         });
     }

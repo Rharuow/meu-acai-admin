@@ -13,6 +13,7 @@ export type User = {
   name: string;
   birthday?: string;
   phone: string;
+  hashCode: string;
   isActive: boolean;
   isBloqued: boolean;
   address: {

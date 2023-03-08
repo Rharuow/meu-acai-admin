@@ -6,6 +6,8 @@ import Switch from "react-switch";
 import Lottie from "lottie-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import copy from "copy-to-clipboard";
+import { ToastContainer, toast } from "react-toastify";
 
 import { User } from "@/src/entities/User";
 import { phoneFormatter } from "@/src/rharuow-admin/util/phoneHandler";
@@ -50,7 +52,8 @@ function Fields({ user }: { user: User }) {
   }, []);
 
   return (
-    <div className="">
+    <div>
+      <ToastContainer />
       <Form.Group className="mb-3" controlId="name">
         <Form.Label className="fw-bold text-primary">Nome</Form.Label>
         <Form.Control
@@ -73,7 +76,25 @@ function Fields({ user }: { user: User }) {
         />
       </Form.Group>
 
-      <Form.Group className="mb-3" controlId="birthday">
+      <Form.Group className="mb-3" controlId="name">
+        <Form.Label className="fw-bold text-primary">
+          Código de validação
+        </Form.Label>
+        <Form.Control
+          onClick={() => {
+            copy(user?.hashCode);
+            toast("Código copiado com sucesso!");
+          }}
+          {...register("hashCode")}
+          readOnly
+          defaultValue={user?.hashCode}
+        />
+        <Form.Text className="text-muted">
+          Clique para copiar o código
+        </Form.Text>
+      </Form.Group>
+
+      <Form.Group className="mb-3" controlId="wallet">
         <Form.Label className="fw-bold text-primary">Carteira</Form.Label>
         <Form.Control
           {...register("wallet")}

@@ -63,21 +63,25 @@ function ProductsPage() {
   const loadConditions = async () => {
     const initialToppings = await getToppings();
     setToppings(initialToppings);
-    setToppingsTotalPage(await getToppingTotalPage());
+    setToppingsTotalPage(getToppingTotalPage(initialToppings.length));
 
     const initialCreams = await getCreams();
     setCreams(initialCreams);
-    setCreamsTotalPage(await getCreamTotalPage());
+    setCreamsTotalPage(getCreamTotalPage(initialCreams.length));
 
     const initialSizes = await getSizes();
     setSizes(initialSizes);
-    setSizesTotalPage(await getSizeTotalPage());
+    setSizesTotalPage(getSizeTotalPage(initialCreams.length));
 
-    initialToppings.length > 0 &&
+    if (
+      initialToppings.length > 0 &&
       initialCreams.length > 0 &&
-      initialSizes.length > 0 &&
-      setMenus(await getMenus());
-    setMenusTotalPage(await getMenuTotalPage());
+      initialSizes.length > 0
+    ) {
+      const getAllMenus = await getMenus();
+      setMenus(getAllMenus);
+      setMenusTotalPage(getMenuTotalPage(getAllMenus.length));
+    }
 
     setLoading(false);
   };

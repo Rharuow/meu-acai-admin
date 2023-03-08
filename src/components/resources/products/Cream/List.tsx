@@ -132,8 +132,9 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              const creamsTotalPage = await getCreamTotalPage();
-              setCreams(await getAllCreams());
+              const newCreams = await getAllCreams();
+              setCreams(newCreams);
+              const creamsTotalPage = getCreamTotalPage(newCreams.length);
               setCreamsTotalPage(creamsTotalPage);
               setCurrentPage(creamsTotalPage);
             }}

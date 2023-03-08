@@ -131,8 +131,9 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              const menusTotalPage = await getMenuTotalPage();
-              setMenus(await getAllMenus());
+              const allMenus = await getAllMenus();
+              setMenus(allMenus);
+              const menusTotalPage = getMenuTotalPage(allMenus.length);
               setMenusTotalPage(menusTotalPage);
               setCurrentPage(menusTotalPage);
             }}

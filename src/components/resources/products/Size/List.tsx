@@ -137,8 +137,9 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              const sizesTotalPage = await getSizeTotalPage();
-              setSizes(await getAllSizes());
+              const allSizes = await getAllSizes();
+              setSizes(allSizes);
+              const sizesTotalPage = getSizeTotalPage(allSizes.length);
               setSizesTotalPage(sizesTotalPage);
               setCurrentPage(sizesTotalPage);
             }}

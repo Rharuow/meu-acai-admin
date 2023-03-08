@@ -11,6 +11,7 @@ function Fields({ topping }: { topping?: Topping }) {
   useEffect(() => {
     topping && topping.visible && setValue("visible", topping.visible);
     topping && topping.value && setValue("value", topping.value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

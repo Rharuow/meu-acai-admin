@@ -141,8 +141,9 @@ export default function List() {
           <Create
             action={async () => {
               setShowCreateModal(false);
-              const toppingsTotalPage = await getToppingTotalPage();
-              setToppings(await getAllToppings());
+              const allToppings = await getAllToppings();
+              const toppingsTotalPage = getToppingTotalPage(allToppings.length);
+              setToppings(allToppings);
               setToppingsTotalPage(toppingsTotalPage);
               setCurrentPage(toppingsTotalPage);
             }}

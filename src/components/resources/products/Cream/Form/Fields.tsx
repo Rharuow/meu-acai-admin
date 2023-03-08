@@ -9,6 +9,7 @@ function Fields({ cream }: { cream?: Cream }) {
 
   useEffect(() => {
     cream && setValue("visible", cream.visible);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

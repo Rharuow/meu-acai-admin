@@ -47,7 +47,7 @@ function Fields({ menu }: { menu?: Menu }) {
     const sizes = !!search
       ? await getSizesByName(search, page)
       : await getSizes(page);
-    const sizeTotalPage = await getSizeTotalPage();
+    const sizeTotalPage = getSizeTotalPage(sizes.length);
 
     return {
       options: sizes.map((size) => ({ value: size, label: size.name })),
@@ -66,7 +66,7 @@ function Fields({ menu }: { menu?: Menu }) {
     const creams = !!search
       ? await getCreamsByName(search, page)
       : await getCreams(page);
-    const creamTotalPage = await getCreamTotalPage();
+    const creamTotalPage = getCreamTotalPage(creams.length);
 
     const options = creams.filter((cream) =>
       creamsOptions.every((c) => c.value.name !== cream.name)
@@ -89,7 +89,7 @@ function Fields({ menu }: { menu?: Menu }) {
     const toppings = !!search
       ? await getToppingsByName(search, page)
       : await getToppings(page);
-    const toppingTotalPage = await getToppingTotalPage();
+    const toppingTotalPage = getToppingTotalPage(toppings.length);
 
     const options = toppings.filter((topping) =>
       toppingsOptions.every((t) => t.value.name !== topping.name)

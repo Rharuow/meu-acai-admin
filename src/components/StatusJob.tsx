@@ -32,7 +32,7 @@ function StatusJob() {
         ) : (
           <Switch
             onChange={handleStatus}
-            checked={isOpen}
+            checked={!!isOpen}
             onColor="#198754"
             offColor="#ff4136"
           />

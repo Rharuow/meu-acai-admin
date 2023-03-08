@@ -35,9 +35,7 @@ function UserList() {
 
   useEffect(() => {
     const getUsersRequest = async () => {
-      const requestUsers = (await listUsers()).filter(
-        (u) => u.name !== user?.name
-      );
+      const requestUsers = await listUsers();
       if (requestUsers) {
         setTotalPage(getUserTotalPage(requestUsers.length));
         setUsers(requestUsers);

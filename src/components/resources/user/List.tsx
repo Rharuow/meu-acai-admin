@@ -50,11 +50,7 @@ function TableComponent() {
         text: "Usuário atualizado com sucesso",
         icon: "success",
       });
-      setUsers(
-        (await listUsers(1, users.length > 10 ? users.length : 10)).filter(
-          (u) => u.name !== userSession?.name
-        )
-      );
+      setUsers(await listUsers(1, users.length > 10 ? users.length : 10));
     }
     setLoading(false);
   };

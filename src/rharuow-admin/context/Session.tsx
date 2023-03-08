@@ -36,7 +36,6 @@ export default function SessionProvider({
     if (userCookied && !user) {
       console.log("Not have user YET");
       setUser(userCookied);
-      // router.push("/");
     }
 
     if (

@@ -1,5 +1,6 @@
 import React from "react";
+import Order from "../components/resources/order";
 
 export default function pedidos() {
-  return <div>pedidos</div>;
+  return <Order />;
 }

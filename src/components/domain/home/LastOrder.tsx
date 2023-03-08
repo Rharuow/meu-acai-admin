@@ -1,13 +1,19 @@
 import React from "react";
+import LottiePlayer from "lottie-react";
+
 import { Card } from "react-bootstrap";
+
+import noOrder from "@/src/components/lottie/no-order.json";
 
 function LastOrder() {
   return (
-    <Card bg="primary" className="w-100">
-      <Card.Header>
-        <h1 className="text-white fs-3 text-center m-0">Últimos Pedidos</h1>
-      </Card.Header>
-      <Card.Body></Card.Body>
+    <Card bg="secondary" className="w-100">
+      <Card.Body className="d-flex flex-wrap justify-content-center">
+        <LottiePlayer animationData={noOrder} />
+        <div className="w-100 d-flex justify-content-center">
+          <span className="fw-bold">Ná há pedidos!</span>
+        </div>
+      </Card.Body>
     </Card>
   );
 }

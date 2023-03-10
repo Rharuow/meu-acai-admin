@@ -11,8 +11,7 @@ function Fields({ size }: { size?: Size }) {
   useEffect(() => {
     size && setValue("visible", size.visible);
     size && setValue("value", size.value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [setValue, size]);
 
   return (
     <>

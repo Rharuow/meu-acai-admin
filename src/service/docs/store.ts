@@ -1,7 +1,7 @@
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { db } from "../../../firebase";
+import { db } from "../firebase";
 
-const adminRef = doc(db, "admin", "IQpSlkYb9kEsiRYKNaPH");
+const adminRef = doc(db, "store", `${process.env.NEXT_PUBLIC_STORE_ID}`);
 
 export const getStatus = async () => {
   return (await getDoc(adminRef)).data()?.status;

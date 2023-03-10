@@ -48,9 +48,9 @@ function Fields({ size }: { size?: Size }) {
         </Form.Label>
         <Form.Control
           required
+          type="number"
           {...register("amountOptions")}
           placeholder="Quantos acompanhamentos?"
-          type="number"
           defaultValue={size?.amountOptions ? size.amountOptions : 1}
           min={1}
         />

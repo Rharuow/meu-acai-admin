@@ -110,6 +110,7 @@ export const updateSize = async (id: string, data: any) => {
     const size = await updateDoc(sizeRef, data);
     return true;
   } catch (error) {
+    console.log("error = ", error);
     return false;
   }
 };

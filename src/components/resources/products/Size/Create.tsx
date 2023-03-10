@@ -21,6 +21,8 @@ export default function Create({
 
     const dataFormatted: Size = {
       ...data,
+      amountCreams: parseInt(`${data.amountCreams}`),
+      amountOptions: parseInt(`${data.amountOptions}`),
       value: parseFloat(`${data.value}`.replace(/,/g, ".")),
     };
 

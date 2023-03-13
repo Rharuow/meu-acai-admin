@@ -26,12 +26,14 @@ export const getOrders = async (
     page > 1
       ? query(
           orderCollection,
+          orderBy("status", "desc"),
           where("status", "not-in", ["canceled", "done"]),
           startAfter(lastVisible),
           limit(perPage)
         )
       : query(
           orderCollection,
+          orderBy("status", "desc"),
           where("status", "not-in", ["canceled", "done"]),
           limit(perPage)
         );

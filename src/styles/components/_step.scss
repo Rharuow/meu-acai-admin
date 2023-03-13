@@ -1,0 +1,20 @@
+.step-current {
+	.step-content {
+		.step-content-bar {
+			.content-bar-fill {
+				animation: increase 2s;
+				animation-iteration-count: infinite;
+			}
+		}
+	}
+}
+
+@keyframes increase {
+	from {
+		width: 0;
+	}
+	to {
+		width: 100%;
+		background-color: $info;
+	}
+}

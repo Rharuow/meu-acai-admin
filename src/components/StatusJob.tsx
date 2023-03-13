@@ -1,23 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Switch from "react-switch";
-import { updateStatus } from "../service/docs/store";
-import { useStoreContext } from "../context/store";
+import { getStatus, updateStatus } from "../service/docs/store";
+import useSWR from "swr";
 import ReactLoading from "../rharuow-admin/components/ReactLoading";
 
 function StatusJob() {
-  const {
-    isOpen,
-    storeLoading: loading,
-    storeSetLoading: setLoading,
-    setIsOpen,
-  } = useStoreContext();
+  const { data: status, isLoading, error } = useSWR("status/", getStatus);
+
+  const [loading, setLoading] = useState<boolean>(isLoading);
+  const [isOpen, setIsOpen] = useState(status);
 
   const handleStatus = async () => {
     setLoading(true);
     await updateStatus(!isOpen);
-    setIsOpen((prevState) => !prevState);
+    setIsOpen(!isOpen);
+    error && console.log("error StatusJob = ", error);
     setLoading(false);
   };
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
 
   return (
     <div className="w-100 mb-3">

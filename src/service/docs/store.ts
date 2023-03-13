@@ -3,7 +3,7 @@ import { db } from "../firebase";
 
 const adminRef = doc(db, "store", `${process.env.NEXT_PUBLIC_STORE_ID}`);
 
-export const getStatus = async () => {
+export const getStatus: () => Promise<boolean> = async () => {
   return (await getDoc(adminRef)).data()?.status;
 };
 

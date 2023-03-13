@@ -9,10 +9,11 @@ function Fields({ topping }: { topping?: Topping }) {
   const { register, setValue, watch } = useFormContext();
 
   useEffect(() => {
-    topping && topping.visible && setValue("visible", topping.visible);
-    topping && topping.value && setValue("value", topping.value);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    topping && setValue("visible", topping.visible);
+    topping && setValue("justExtra", topping.justExtra);
+    topping && setValue("isExtra", topping.isExtra);
+    topping && setValue("value", topping.value);
+  }, [setValue, topping]);
 
   return (
     <>
@@ -59,6 +60,33 @@ function Fields({ topping }: { topping?: Topping }) {
           placeholder="Ex: Pacotes, sacos, gramas"
           {...register("unit")}
           {...(topping?.unit && { defaultValue: topping?.unit })}
+        />
+      </Form.Group>
+      <Form.Group className="mb-3 d-flex" controlId="value">
+        <Form.Label className="fw-bold text-primary me-3">
+          Somente Extra?
+        </Form.Label>
+        <Switch
+          {...register("justExtra")}
+          onChange={(e) => {
+            setValue("justExtra", e);
+            setValue("isExtra", e);
+          }}
+          checked={watch("justExtra")}
+          onColor="#198754"
+          offColor="#ff4136"
+        />
+      </Form.Group>
+      <Form.Group className="mb-3 d-flex" controlId="value">
+        <Form.Label className="fw-bold text-primary me-3">Extra?</Form.Label>
+        <Switch
+          {...register("isExtra")}
+          onChange={(e) => {
+            !watch("justExtra") && setValue("isExtra", e);
+          }}
+          checked={watch("isExtra")}
+          onColor="#198754"
+          offColor="#ff4136"
         />
       </Form.Group>
       <Form.Group className="mb-3 d-flex" controlId="value">

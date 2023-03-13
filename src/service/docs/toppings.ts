@@ -111,6 +111,7 @@ export const updateTopping = async (id: string, data: any) => {
     await updateDoc(toppingRef, data);
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };

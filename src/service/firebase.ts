@@ -25,6 +25,7 @@ export const db = getFirestore();
 export const userCollection = collection(db, "users");
 export const adminCollection = collection(db, "admin");
 export const sizeCollection = collection(db, "sizes");
+export const orderCollection = collection(db, "orders");
 export const toppingCollection = collection(db, "toppings");
 export const menuCollection = collection(db, "menus");
 export const creamCollection = collection(db, "creams");

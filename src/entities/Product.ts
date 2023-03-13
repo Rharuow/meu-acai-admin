@@ -3,6 +3,8 @@ import { Entity } from "./Entity";
 export interface Topping extends Entity {
   name: string;
   value: number;
+  justExtra?: boolean;
+  isExtra?: boolean;
   visible: boolean;
   amount: number;
   unit: string;
